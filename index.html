@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="zh-CN"><head>
+<html lang="zh-CN" data-readonly="true"><head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>壹出好戏剧团 · 近期活动一览表与日程管理</title>
@@ -27,6 +27,12 @@
   --theme-border: #1e40af;
   --theme-ink: #ffffff;
   --theme-soft: #eff6ff;
+
+  /* 日常排练色彩：天蓝色背景 */
+  --rehearsal-bg: #0284c7;
+  --rehearsal-border: #0369a1;
+  --rehearsal-ink: #ffffff;
+  --rehearsal-soft: #f0f9ff;
 
   /* 保存成功绿色 */
   --save-green: #15803d;
@@ -56,7 +62,7 @@ body {
 }
 button, input, select, textarea, summary { font: inherit; }
 button, summary { cursor: pointer; }
-button:focus-visible, input:focus-visible, select:focus-visible, textarea:focus-visible {
+button:focus-visible, input:focus-visible, select:focus-visible, textarea:focus-visible, a:focus-visible {
   outline: 2px solid var(--brand);
   outline-offset: 2px;
 }
@@ -178,10 +184,21 @@ main {
   border-radius: 999px;
 }
 h1, h2, h3, h4, p { margin: 0; }
-h1 {
-  font-size: clamp(24px, 3vw, 36px);
-  line-height: 1.2;
+.main-title-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
   margin: 6px 0 14px;
+}
+.main-title-row h1 {
+  margin: 0;
+  flex: 1 1 auto;
+}
+h1 {
+  font-size: clamp(22px, 2.6vw, 34px);
+  line-height: 1.25;
 }
 
 /* 剧团简介与粗门小程序同步栏 */
@@ -444,8 +461,13 @@ h1 {
   color: var(--theme-ink);
   border: 1px solid var(--theme-border);
 }
+.cat-tag.rehearsal {
+  background: var(--rehearsal-bg);
+  color: var(--rehearsal-ink);
+  border: 1px solid var(--rehearsal-border);
+}
 
-/* 地图导航按钮样式 */
+/* 地图导航与报名跳转按钮样式 */
 .map-link-btn {
   display: inline-flex;
   align-items: center;
@@ -474,6 +496,17 @@ h1 {
   background: #dcfce7;
   color: #166534;
 }
+.map-link-btn.cal-btn {
+  background: #fdf4ff;
+  color: #a21caf;
+  border-color: #f5d0fe;
+  cursor: pointer;
+}
+.map-link-btn.cal-btn:hover {
+  background: #fae8ff;
+  color: #86198f;
+  border-color: #e879f9;
+}
 .overview-map-link {
   color: #1d4ed8;
   text-decoration: none;
@@ -485,6 +518,30 @@ h1 {
 .overview-map-link:hover {
   text-decoration: underline;
   color: #1e40af;
+}
+/* 一览表中的可点击报名链接 */
+.overview-reg-link {
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 12px;
+  font-weight: 750;
+  color: #1d4ed8;
+  background: #eff6ff;
+  border: 1px solid #bfdbfe;
+  padding: 3px 9px;
+  border-radius: 6px;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  cursor: pointer;
+  transition: all .15s ease;
+}
+.overview-reg-link:hover {
+  background: #dbeafe;
+  color: #1e40af;
+  border-color: #60a5fa;
+  box-shadow: 0 1px 4px rgba(29, 78, 216, 0.15);
 }
 
 /* 主体左右分栏 */
@@ -505,6 +562,9 @@ h1 {
   position: sticky;
   top: 62px;
   min-height: 540px;
+}
+body.readonly-export .agenda {
+  top: 20px;
 }
 h2 {
   font-size: 19px;
@@ -555,6 +615,11 @@ h2 {
   background: var(--theme-bg);
   color: var(--theme-ink);
   border: 1px solid var(--theme-border);
+}
+.key.rehearsal {
+  background: var(--rehearsal-bg);
+  color: var(--rehearsal-ink);
+  border: 1px solid var(--rehearsal-border);
 }
 .key.holiday {
   background: var(--holiday-bg);
@@ -647,6 +712,16 @@ h2 {
   color: #fff;
   font-weight: 800;
 }
+.date.has-rehearsal {
+  background: var(--rehearsal-bg);
+  color: #fff;
+  font-weight: 800;
+}
+.date.has-multi {
+  background: linear-gradient(135deg, var(--drama-bg) 0%, var(--theme-bg) 50%, var(--rehearsal-bg) 100%);
+  color: #fff;
+  font-weight: 800;
+}
 .date.has-both {
   background: linear-gradient(135deg, var(--drama-bg) 50%, var(--theme-bg) 50%);
   color: #fff;
@@ -683,6 +758,16 @@ h2 {
 }
 .date.selected.has-theme {
   background: var(--theme-bg);
+  color: #ffffff;
+  box-shadow: 0 0 0 2px #fff inset;
+}
+.date.selected.has-rehearsal {
+  background: var(--rehearsal-bg);
+  color: #ffffff;
+  box-shadow: 0 0 0 2px #fff inset;
+}
+.date.selected.has-multi {
+  background: linear-gradient(135deg, var(--drama-bg) 0%, var(--theme-bg) 50%, var(--rehearsal-bg) 100%);
   color: #ffffff;
   box-shadow: 0 0 0 2px #fff inset;
 }
@@ -734,6 +819,14 @@ h2 {
   background: var(--theme-bg);
   color: #ffffff;
 }
+.selected-date-pill.has-rehearsal {
+  background: var(--rehearsal-bg);
+  color: #ffffff;
+}
+.selected-date-pill.has-multi {
+  background: linear-gradient(135deg, var(--drama-bg) 0%, var(--theme-bg) 50%, var(--rehearsal-bg) 100%);
+  color: #ffffff;
+}
 .selected-date-pill.has-both {
   background: linear-gradient(135deg, var(--drama-bg) 0%, var(--theme-bg) 100%);
   color: #ffffff;
@@ -777,6 +870,18 @@ h2 {
   border-color: var(--theme-border);
   color-scheme: dark;
 }
+.date-nav input[type="date"].has-rehearsal {
+  background: var(--rehearsal-bg);
+  color: #ffffff;
+  border-color: var(--rehearsal-border);
+  color-scheme: dark;
+}
+.date-nav input[type="date"].has-multi {
+  background: var(--theme-bg);
+  color: #ffffff;
+  border-color: var(--theme-border);
+  color-scheme: dark;
+}
 .date-nav input[type="date"].has-both {
   background: var(--theme-bg);
   color: #ffffff;
@@ -808,6 +913,16 @@ h2 {
 }
 .day-banner.has-theme {
   background: var(--theme-bg);
+  color: #ffffff;
+  border-color: var(--theme-border);
+}
+.day-banner.has-rehearsal {
+  background: var(--rehearsal-bg);
+  color: #ffffff;
+  border-color: var(--rehearsal-border);
+}
+.day-banner.has-multi {
+  background: linear-gradient(135deg, var(--drama-bg) 0%, var(--theme-bg) 50%, var(--rehearsal-bg) 100%);
   color: #ffffff;
   border-color: var(--theme-border);
 }
@@ -924,6 +1039,10 @@ h2 {
   border-left-color: var(--theme-bg);
   background: linear-gradient(to bottom, var(--theme-soft) 0%, #ffffff 45%);
 }
+.activity-box.cat-rehearsal {
+  border-left-color: var(--rehearsal-bg);
+  background: linear-gradient(to bottom, var(--rehearsal-soft) 0%, #ffffff 45%);
+}
 .activity-box-header {
   display: flex;
   justify-content: space-between;
@@ -973,7 +1092,7 @@ h2 {
   font-weight: 800;
   color: #111827;
 }
-/* 活动时间：蓝色背景，不要红色背景 */
+/* 活动时间：蓝色背景 */
 .info-val.time-val {
   font-size: 14px;
   font-weight: 800;
@@ -993,6 +1112,24 @@ h2 {
   background: #eff6ff;
   border: 1px solid #bfdbfe;
   transition: all .2s ease;
+}
+/* 预览与导出页面中的可点击报名链接样式 */
+a.info-val.link-val.reg-link-anchor {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 4px 10px;
+  font-weight: 750;
+}
+a.info-val.link-val.reg-link-anchor:hover {
+  background: #dbeafe;
+  color: #1e40af;
+  border-color: #60a5fa;
+  box-shadow: 0 2px 6px rgba(29, 78, 216, 0.16);
 }
 .info-val.link-val.link-updated-flash {
   background: #dcfce7;
@@ -1189,6 +1326,194 @@ h2 {
   background: #f8fafc;
 }
 
+/* ==================== 顶部关注栏与核心行动入口 ==================== */
+.social-follow-bar {
+  display: inline-flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 8px;
+  flex-wrap: wrap;
+  padding: 6px 12px;
+  background: rgba(248, 250, 252, 0.95);
+  border: 1px solid rgba(226, 232, 240, 0.95);
+  border-radius: 30px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.03);
+  flex-shrink: 0;
+}
+.social-follow-label {
+  font-size: 12.5px;
+  font-weight: 700;
+  color: #475569;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  margin-right: 2px;
+}
+.social-pill-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 12px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 700;
+  text-decoration: none;
+  transition: all 0.18s ease;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+  cursor: pointer;
+}
+.social-pill-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
+}
+.social-pill-wx {
+  background: #07c160;
+  color: #fff;
+  border: 1px solid #059648;
+}
+.social-pill-xhs {
+  background: #ff2442;
+  color: #fff;
+  border: 1px solid #e01d37;
+}
+.social-pill-dy {
+  background: #111318;
+  color: #fff;
+  border: 1px solid #000;
+}
+
+.top-actions-bar {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+  margin-top: 14px;
+  margin-bottom: 18px;
+}
+.top-action-card {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 13px 18px;
+  border-radius: 12px;
+  font-size: 14.5px;
+  font-weight: 800;
+  text-decoration: none;
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.06);
+  border: 1.5px solid transparent;
+  user-select: none;
+}
+.top-action-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.12);
+}
+.top-action-vip {
+  background: linear-gradient(135deg, #fef08a 0%, #fde047 50%, #eab308 100%);
+  color: #713f12;
+  border-color: #facc15;
+}
+.top-action-biz {
+  background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%);
+  color: #1e40af;
+  border-color: #bfdbfe;
+}
+.top-action-reg {
+  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+  color: #ffffff;
+  border-color: #047857;
+}
+
+/* 模态弹窗（会员海报大图预览） */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(15, 23, 42, 0.72);
+  backdrop-filter: blur(5px);
+  -webkit-backdrop-filter: blur(5px);
+  z-index: 9999;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+.modal-overlay.active {
+  display: flex;
+}
+.modal-card {
+  background: #ffffff;
+  border-radius: 16px;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+  max-width: 620px;
+  width: 100%;
+  max-height: 92vh;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  animation: modalPop 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+}
+@keyframes modalPop {
+  from { opacity: 0; transform: scale(0.95); }
+  to { opacity: 1; transform: scale(1); }
+}
+.modal-card-header {
+  padding: 14px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid #e2e8f0;
+  background: #fafafa;
+}
+.modal-card-title {
+  font-size: 16px;
+  font-weight: 800;
+  color: #0f172a;
+}
+.modal-card-close {
+  background: transparent;
+  border: none;
+  font-size: 22px;
+  line-height: 1;
+  color: #64748b;
+  cursor: pointer;
+  padding: 4px 8px;
+  border-radius: 6px;
+}
+.modal-card-close:hover {
+  background: #e2e8f0;
+  color: #0f172a;
+}
+.modal-card-body {
+  padding: 16px 20px 20px;
+  overflow-y: auto;
+  text-align: center;
+}
+.modal-vip-poster {
+  max-width: 100%;
+  height: auto;
+  border-radius: 10px;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.12);
+  display: block;
+  margin: 0 auto;
+}
+
+@media (max-width: 768px) {
+  .main-title-row {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+  .social-follow-bar {
+    width: 100%;
+    justify-content: flex-start;
+  }
+  .top-actions-bar {
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+}
+
 body.edit-mode [contenteditable="true"]:hover {
   background: rgba(29, 78, 216, 0.08);
   box-shadow: 0 0 0 1px rgba(29, 78, 216, 0.3);
@@ -1198,8 +1523,16 @@ body.edit-mode [contenteditable="true"]:focus {
   box-shadow: 0 0 0 2px var(--brand);
   outline: none;
 }
-body:not(.edit-mode) .edit-only {
+body:not(.edit-mode) .edit-only,
+body.readonly-export .edit-only,
+body.readonly-export .editor-bar,
+body.readonly-export .cumen-sync-card,
+body.readonly-export .drawer-box {
   display: none !important;
+}
+body:not(.edit-mode) .top-banner-grid,
+body.readonly-export .top-banner-grid {
+  grid-template-columns: 1fr;
 }
 
 @media (max-width: 1080px) {
@@ -1211,51 +1544,304 @@ body:not(.edit-mode) .edit-only {
   .form-grid { grid-template-columns: 1fr; }
 }
 @media print {
-  .editor-bar, .cumen-sync-card, .edit-only { display: none !important; }
+  .editor-bar, .cumen-sync-card, .edit-only, .drawer-box { display: none !important; }
+  .top-banner-grid { grid-template-columns: 1fr; }
   .layout { display: block; }
+}
+
+/* ==================== 智能日历跳转与有效提醒提示卡片样式 ==================== */
+.cal-toast-mask {
+  position: fixed;
+  inset: 0;
+  background: rgba(15, 23, 42, 0.45);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  z-index: 999999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.cal-toast-mask.show {
+  opacity: 1;
+  pointer-events: auto;
+}
+.cal-toast-card {
+  width: 100%;
+  max-width: 440px;
+  background: #ffffff;
+  border-radius: 20px;
+  box-shadow: 0 25px 50px -12px rgba(15, 23, 42, 0.25), 0 0 0 1px rgba(15, 23, 42, 0.08);
+  padding: 24px;
+  position: relative;
+  transform: translateY(16px) scale(0.96);
+  transition: transform 0.28s cubic-bezier(0.16, 1, 0.3, 1);
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "PingFang SC", "Helvetica Neue", sans-serif;
+  color: #1e293b;
+}
+.cal-toast-mask.show .cal-toast-card {
+  transform: translateY(0) scale(1);
+}
+.cal-toast-header {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  margin-bottom: 16px;
+}
+.cal-toast-icon {
+  width: 48px;
+  height: 48px;
+  border-radius: 14px;
+  background: linear-gradient(135deg, #e0e7ff 0%, #ede9fe 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 26px;
+  flex-shrink: 0;
+  box-shadow: 0 4px 12px rgba(99, 102, 241, 0.15);
+}
+.cal-toast-title-box h4 {
+  margin: 0 0 4px 0;
+  font-size: 17px;
+  font-weight: 700;
+  color: #0f172a;
+  letter-spacing: -0.01em;
+}
+.cal-toast-title-box p {
+  margin: 0;
+  font-size: 13px;
+  color: #64748b;
+  line-height: 1.4;
+}
+.cal-toast-close {
+  position: absolute;
+  top: 18px;
+  right: 18px;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  border: none;
+  background: #f1f5f9;
+  color: #64748b;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 15px;
+  transition: all 0.15s ease;
+}
+.cal-toast-close:hover {
+  background: #e2e8f0;
+  color: #0f172a;
+}
+.cal-toast-body {
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 14px;
+  padding: 14px;
+  margin-bottom: 18px;
+  font-size: 13px;
+  line-height: 1.6;
+}
+.cal-toast-detail-row {
+  display: flex;
+  margin-bottom: 6px;
+}
+.cal-toast-detail-row:last-child {
+  margin-bottom: 0;
+}
+.cal-toast-detail-label {
+  width: 72px;
+  color: #64748b;
+  flex-shrink: 0;
+  font-weight: 500;
+}
+.cal-toast-detail-val {
+  color: #1e293b;
+  font-weight: 600;
+  word-break: break-all;
+}
+.cal-toast-alarms {
+  margin-top: 10px;
+  padding-top: 10px;
+  border-top: 1px dashed #cbd5e1;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.cal-toast-alarm-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  color: #4f46e5;
+  background: #eef2ff;
+  padding: 3px 8px;
+  border-radius: 6px;
+  font-weight: 600;
+}
+.cal-toast-guide {
+  font-size: 12px;
+  color: #475569;
+  margin-bottom: 16px;
+  background: #fffbeb;
+  border: 1px solid #fde68a;
+  border-radius: 10px;
+  padding: 10px 12px;
+  line-height: 1.5;
+}
+.cal-toast-guide strong {
+  color: #b45309;
+}
+.cal-toast-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.cal-toast-btn-row {
+  display: flex;
+  gap: 8px;
+}
+.cal-toast-btn-primary {
+  flex: 1;
+  background: linear-gradient(135deg, #4f46e5 0%, #6366f1 100%);
+  color: #ffffff;
+  border: none;
+  border-radius: 12px;
+  padding: 12px 16px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(79, 70, 229, 0.25);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  text-decoration: none;
+  transition: all 0.15s ease;
+}
+.cal-toast-btn-primary:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 16px rgba(79, 70, 229, 0.35);
+}
+.cal-toast-btn-app {
+  flex: 1;
+  background: linear-gradient(135deg, #0284c7 0%, #0ea5e9 100%);
+  color: #ffffff;
+  border: none;
+  border-radius: 12px;
+  padding: 12px 16px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(14, 165, 233, 0.25);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  text-decoration: none;
+  transition: all 0.15s ease;
+}
+.cal-toast-btn-app:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 16px rgba(14, 165, 233, 0.35);
+}
+.cal-toast-btn-secondary {
+  flex: 1;
+  background: #f1f5f9;
+  color: #475569;
+  border: 1px solid #cbd5e1;
+  border-radius: 12px;
+  padding: 10px 12px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  text-decoration: none;
+  transition: all 0.15s ease;
+}
+.cal-toast-btn-secondary:hover {
+  background: #e2e8f0;
+  color: #0f172a;
 }
 </style>
 </head>
-<body class="edit-mode">
+<body class="readonly-export">
 
-<!-- 顶部固定工具栏 -->
+<!-- 顶部固定工具栏（导出后的预览文件将自动隐藏此栏） -->
 <div class="editor-bar">
   <div class="editor-bar-left">
     <span class="status-pill" id="mode-indicator">编辑模式已开启 · 任意修改均自动实时保存</span>
-    <span class="save-status-pill" id="save-status-pill">✅ 已手动保存最新内容</span>
+    <span class="save-status-pill" id="save-status-pill">✅ 已手动保存最新内容 (12:27:52)</span>
     <button type="button" class="btn sm" id="toggle-edit-btn">切换为预览模式</button>
-    <button type="button" class="btn sm" id="undo-cancel-btn" hidden="">↩ 撤销上次操作</button>
+    <button type="button" class="btn sm edit-only" id="undo-cancel-btn" hidden="">↩ 撤销上次操作</button>
   </div>
   <div class="editor-bar-right">
-    <button type="button" class="btn save-btn sm" id="manual-save-btn" title="立即保存当前所有修改（快捷键 Ctrl+S / Cmd+S）">💾 保存</button>
-    <button type="button" class="btn primary sm" id="top-add-activity-btn">+ 添加活动</button>
-    <button type="button" class="btn accent sm" id="top-cumen-parse-btn">🔗 粗门小程序抓取 / 导入</button>
-    <button type="button" class="btn sm" id="download-html-btn" title="将最新保存的内容导出/覆盖为HTML文件">📥 导出最新 HTML</button>
+    <button type="button" class="btn save-btn sm edit-only" id="manual-save-btn" title="立即保存当前所有修改（快捷键 Ctrl+S / Cmd+S）">💾 保存</button>
+    <button type="button" class="btn primary sm edit-only" id="top-add-activity-btn">+ 添加活动</button>
+    <button type="button" class="btn accent sm edit-only" id="top-cumen-parse-btn">🔗 粗门小程序抓取 / 导入</button>
+    <button type="button" class="btn primary sm edit-only" id="download-editable-html-btn" title="导出包含最新修改数据且完全可再次编辑的 HTML 文件">📥 导出最新可编辑 HTML</button>
+    <button type="button" class="btn sm" id="download-html-btn" title="导出为仅可预览、不可编辑的只读 HTML 文件">📥 导出最新 HTML（仅预览）</button>
     <button type="button" class="btn sm" id="print-btn">打印 / PDF</button>
-    <button type="button" class="btn sm" id="reset-data-btn">重置默认数据</button>
+    <button type="button" class="btn sm edit-only" id="reset-data-btn">重置默认数据</button>
   </div>
 </div>
 
 <main>
   <header>
     <div class="masthead">
-      <p class="eyebrow" id="ui-eyebrow" contenteditable="true">壹出好戏剧团 · 2026—2027 近期活动一览与日程表</p>
-      <span class="badge" id="ui-badge" contenteditable="true">话剧演出 · 主题活动 · 法定节假日与补班标记</span>
+      <p class="eyebrow" id="ui-eyebrow" contenteditable="false">壹出好戏剧团 · 2026—2027 近期活动一览与日程表</p>
+      <span class="badge" id="ui-badge" contenteditable="false">话剧演出 · 主题活动 · 法定节假日与补班标记</span>
     </div>
-    <h1 id="ui-main-title" contenteditable="true">壹出好戏剧团 · 近期活动一览表</h1>
+
+    <!-- 大标题与右侧关注官方平台 -->
+    <div class="main-title-row">
+      <h1 id="ui-main-title" contenteditable="false">壹出好戏剧团 · 近期活动一览表</h1>
+      <div class="social-follow-bar">
+        <span class="social-follow-label">📢 关注剧团官方平台：</span>
+        <a class="social-pill-btn social-pill-wx" href="https://mp.weixin.qq.com/s/PSuk5zwmVCU8Bg-CZoLBLw" target="_blank" rel="noopener noreferrer" title="点击查看并关注微信公众号">
+          💬 关注公众号
+        </a>
+        <a class="social-pill-btn social-pill-xhs" href="https://xhslink.cn/o/3YUHODQnXEx" target="_blank" rel="noopener noreferrer" title="点击打开小红书主页">
+          📕 关注小红书
+        </a>
+        <a class="social-pill-btn social-pill-dy" href="https://v.douyin.com/ssdPslVhnwQ/" target="_blank" rel="noopener noreferrer" title="点击打开抖音主页">
+          🎵 关注抖音
+        </a>
+      </div>
+    </div>
+
+    <!-- 顶部三大核心行动入口：成为会员、商务合作、在线快速报名登记 -->
+    <div class="top-actions-bar">
+      <button type="button" class="top-action-card top-action-vip" id="open-vip-btn" title="查看壹出好戏剧团年度会员专属权益与加入通道">
+        👑 成为会员
+      </button>
+      <a class="top-action-card top-action-biz" href="https://www.wjx.top/vm/evZMmaf.aspx" target="_blank" rel="noopener noreferrer" title="点击跳转商务合作问卷登记通道">
+        🤝 商务合作
+      </a>
+      <a class="top-action-card top-action-reg" href="https://www.wjx.top/vm/wFtmFMI.aspx" target="_blank" rel="noopener noreferrer" title="点击跳转在线报名登记通道">
+        ✍️ 在线快速报名登记
+      </a>
+    </div>
 
     <div class="top-banner-grid">
       <!-- 剧团介绍 -->
       <section class="troupe-intro-card">
         <div class="troupe-intro-title">
           <span>🎭 关于“壹出好戏”剧团</span>
-          <span class="troupe-slogan-pill" id="ui-slogan" contenteditable="true">壹出好戏，永不停戏</span>
+          <span class="troupe-slogan-pill" id="ui-slogan" contenteditable="false">壹出好戏，永不停戏</span>
         </div>
-        <p class="troupe-intro-body" id="ui-intro-body" contenteditable="true">“壹出好戏”剧团，简称壹出好戏，成立于2024年。以“壹出好戏，永不停戏”为口号，聚集了导演、演员、摄影、摄像、舞美、传播、商务等领域人才，为爱发电，只为舞台上的梦想。壹出好戏剧团是一个一起开心演戏，建立友谊，制造乐趣的社群。秉持着“自由”与“开放”的文化，欢迎每一个有热情，有梦想的朋友。</p>
+        <p class="troupe-intro-body" id="ui-intro-body" contenteditable="false">“壹出好戏”剧团，简称壹出好戏，成立于2024年。以“壹出好戏，永不停戏”为口号，聚集了导演、演员、摄影、摄像、舞美、传播、商务等领域人才，为爱发电，只为舞台上的梦想。壹出好戏剧团是一个一起开心演戏，建立友谊，制造乐趣的社群。秉持着“自由”与“开放”的文化，欢迎每一个有热情，有梦想的朋友。</p>
       </section>
 
-      <!-- 粗门小程序活动信息抓取与同步 -->
-      <section class="cumen-sync-card">
+      <!-- 粗门小程序活动信息抓取与同步（仅编辑模式可见，导出后自动隐藏） -->
+      <section class="cumen-sync-card edit-only">
         <div class="cumen-sync-header">
           <span class="cumen-sync-title">🔗 粗门小程序活动信息抓取与同步</span>
           <span class="cat-tag theme">小程序通道已关联</span>
@@ -1265,11 +1851,11 @@ body:not(.edit-mode) .edit-only {
           <button type="button" class="btn accent sm" id="sync-cumen-btn">🔄 抓取小程序活动</button>
           <button type="button" class="btn sm" id="open-parse-modal-btn">📋 粘贴小程序文本解析</button>
         </div>
-        <div class="cumen-sync-status" id="cumen-sync-status">✅ 支持直接粘贴粗门小程序分享内容或口令，点击「🔄 抓取小程序活动」或「📋 粘贴小程序文本解析」即可准确识别报名链接并更新到下方活动框中。</div>
+        <div class="cumen-sync-status" id="cumen-sync-status">✅ 支持直接粘贴粗门小程序分享内容或有效报名链接，导出预览页面后点击链接可直接跳转到报名活动页面。</div>
       </section>
     </div>
 
-    <!-- 顶部筛选栏：查看年份（无双年全景） + 查看月份可选按钮（已隐藏过去月份） + 活动分类 + 剧目/活动名称 -->
+    <!-- 顶部筛选栏：查看年份 + 查看月份可选按钮（已隐藏过去月份） + 活动分类 + 剧目/活动名称 -->
     <div class="controls-row">
       <div class="filters-left">
         <label class="calendar-filter" for="period-select">
@@ -1282,26 +1868,27 @@ body:not(.edit-mode) .edit-only {
 
         <div class="calendar-filter" role="group" aria-label="查看月份">
           <span>查看月份（已隐藏过去月份）</span>
-          <div class="month-btn-group" id="month-filter-btns"></div>
+          <div class="month-btn-group" id="month-filter-btns"><button type="button" class="month-opt-btn active" title="查看 2026 年全部未过去的月份">全部 (2个月)</button><button type="button" class="month-opt-btn" title="仅查看 2026年11月"><span>11月</span><i class="month-opt-dot" title="该月有活动排期"></i></button><button type="button" class="month-opt-btn" title="仅查看 2026年12月"><span>12月</span><i class="month-opt-dot" title="该月有活动排期"></i></button></div>
         </div>
 
         <label class="calendar-filter" for="category-filter">
-          <span>活动分类筛选（仅分两类）</span>
+          <span>活动分类筛选</span>
           <select id="category-filter">
-            <option value="">全部类型（话剧演出 + 主题活动）</option>
+            <option value="">全部类型（话剧演出 + 主题活动 + 日常排练）</option>
             <option value="drama">🎭 话剧演出</option>
             <option value="theme">✨ 主题活动</option>
+            <option value="rehearsal">🎬 日常排练</option>
           </select>
         </label>
 
         <label class="calendar-filter" for="title-filter">
           <span>剧目名称 / 主题活动名称筛选</span>
-          <select id="title-filter"><option value="">全部剧目与主题活动</option></select>
+          <select id="title-filter"><option value="">全部剧目与主题活动</option><option value="🌟🌟排练+角色招募｜阿加莎巅峰之作《无人生还》">✨ 主题活动｜🌟🌟排练+角色招募｜阿加莎巅峰之作《无人生还》</option><option value="🌟🌟排练观摩｜阿加莎巅峰之作《无人生还》">✨ 主题活动｜🌟🌟排练观摩｜阿加莎巅峰之作《无人生还》</option><option value="🌟🌟演读会观众招募｜阿加莎巅峰之作《无人生还》">🎭 话剧演出｜🌟🌟演读会观众招募｜阿加莎巅峰之作《无人生还》</option><option value="🌟🌟别emo了！这里有个喜剧综艺请你当主角">✨ 主题活动｜🌟🌟别emo了！这里有个喜剧综艺请你当主角</option><option value="🌟🌟话剧排练｜《归队》招募幕后人才">✨ 主题活动｜🌟🌟话剧排练｜《归队》招募幕后人才</option><option value="🌟🌟免费观剧现场招募小演员">🎭 话剧演出｜🌟🌟免费观剧现场招募小演员</option></select>
         </label>
       </div>
 
       <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;">
-        <button type="button" class="btn primary sm" id="filter-bar-add-btn">+ 添加活动</button>
+        <button type="button" class="btn primary sm edit-only" id="filter-bar-add-btn">+ 添加活动</button>
         <button type="button" class="btn sm" id="toggle-overview-btn">收起/展开近期活动一览表</button>
       </div>
     </div>
@@ -1311,9 +1898,9 @@ body:not(.edit-mode) .edit-only {
       <div class="overview-header">
         <div class="overview-title">
           <span>📋 近期活动一览表</span>
-          <span style="font-size:12px;font-weight:600;color:var(--muted);" id="overview-count-label">（共 2 场活动）</span>
+          <span style="font-size:12px;font-weight:600;color:var(--muted);" id="overview-count-label">（共 13 场活动）</span>
         </div>
-        <span class="hint">点击任意活动名称可定位至对应日期；点击活动地点可直接唤起设备自带地图导航</span>
+        <span class="hint">点击任意活动名称可定位至对应日期；点击报名链接可直接跳转到报名活动页面</span>
       </div>
       <div class="overview-table-wrap">
         <table class="overview-table">
@@ -1323,11 +1910,11 @@ body:not(.edit-mode) .edit-only {
               <th>活动分类</th>
               <th>具体剧目 / 主题活动名称</th>
               <th>活动地点（点击打开地图）</th>
-              <th>粗门小程序报名链接</th>
+              <th>粗门小程序报名链接（点击跳转报名页）</th>
               <th class="edit-only">操作</th>
             </tr>
           </thead>
-          <tbody id="overview-tbody"></tbody>
+          <tbody id="overview-tbody"><tr><td style="white-space: nowrap;"><span class="overview-datetime-pill">2026/11/21  周六 13:30</span></td><td><span class="cat-tag rehearsal">🎬 日常排练</span></td><td class="overview-title-cell" title="点击跳转到该活动日期">🌟🌟排练+角色招募｜阿加莎巅峰之作《无人生还》</td><td><a class="overview-map-link" href="https://maps.apple.com/?q=%E9%95%BF%E5%BE%81%E9%95%87%E7%A5%A5%E5%92%8C%E5%85%9A%E7%BE%A4%E6%9C%8D%E5%8A%A1%E4%B8%AD%E5%BF%83" target="_blank" rel="noopener noreferrer" title="点击唤起设备自带地图查看位置">🧭 长征镇祥和党群服务中心 ↗</a></td><td><a class="overview-reg-link" title="点击直接跳转到报名活动页面" href="https://wxmpurl.cn/xbcwN3hutPu" target="_blank" rel="noopener noreferrer">🔗 https://wxmpurl.cn/xbcwN3hutPu ↗</a></td><td class="edit-only" style="white-space: nowrap;"><button type="button" class="btn sm" title="添加到系统日历提醒" style="margin-right: 6px;">📅 添加至日历</button><button type="button" class="btn sm" style="margin-right: 6px;">查看/编辑</button><button type="button" class="btn danger sm">× 取消活动</button></td></tr><tr><td style="white-space: nowrap;"><span class="overview-datetime-pill">2026/11/28  周六 09:30</span></td><td><span class="cat-tag rehearsal">🎬 日常排练</span></td><td class="overview-title-cell" title="点击跳转到该活动日期">🌟🌟排练观摩｜阿加莎巅峰之作《无人生还》</td><td><a class="overview-map-link" href="https://maps.apple.com/?q=%E9%95%BF%E5%BE%81%E9%95%87%E7%A5%A5%E5%92%8C%E5%85%9A%E7%BE%A4%E6%9C%8D%E5%8A%A1%E4%B8%AD%E5%BF%83" target="_blank" rel="noopener noreferrer" title="点击唤起设备自带地图查看位置">🧭 长征镇祥和党群服务中心 ↗</a></td><td><a class="overview-reg-link" title="点击直接跳转到报名活动页面" href="weixin://dl/business/?t=1c5sfrX7k5u" target="_blank" rel="noopener noreferrer">🔗 weixin://dl/business/?t=1c5sfrX7k5u ↗</a></td><td class="edit-only" style="white-space: nowrap;"><button type="button" class="btn sm" title="添加到系统日历提醒" style="margin-right: 6px;">📅 添加至日历</button><button type="button" class="btn sm" style="margin-right: 6px;">查看/编辑</button><button type="button" class="btn danger sm">× 取消活动</button></td></tr><tr><td style="white-space: nowrap;"><span class="overview-datetime-pill">2026/11/29  周日 14:00</span></td><td><span class="cat-tag drama">🎭 话剧演出</span></td><td class="overview-title-cell" title="点击跳转到该活动日期">🌟🌟演读会观众招募｜阿加莎巅峰之作《无人生还》</td><td><a class="overview-map-link" href="https://maps.apple.com/?q=%E9%95%BF%E5%BE%81%E9%95%87%E7%A5%A5%E5%92%8C%E5%85%9A%E7%BE%A4%E6%9C%8D%E5%8A%A1%E4%B8%AD%E5%BF%83" target="_blank" rel="noopener noreferrer" title="点击唤起设备自带地图查看位置">🧭 长征镇祥和党群服务中心 ↗</a></td><td><a class="overview-reg-link" title="点击直接跳转到报名活动页面" href="weixin://dl/business/?t=vryB0af0P3b" target="_blank" rel="noopener noreferrer">🔗 weixin://dl/business/?t=vryB0af0P3b ↗</a></td><td class="edit-only" style="white-space: nowrap;"><button type="button" class="btn sm" title="添加到系统日历提醒" style="margin-right: 6px;">📅 添加至日历</button><button type="button" class="btn sm" style="margin-right: 6px;">查看/编辑</button><button type="button" class="btn danger sm">× 取消活动</button></td></tr><tr><td style="white-space: nowrap;"><span class="overview-datetime-pill">2026/11/29  周日 14:00</span></td><td><span class="cat-tag theme">✨ 主题活动</span></td><td class="overview-title-cell" title="点击跳转到该活动日期">🌟🌟别emo了！这里有个喜剧综艺请你当主角</td><td><a class="overview-map-link" href="https://maps.apple.com/?q=%E6%A2%A6%E6%83%B3%E9%A9%BF%E7%AB%99" target="_blank" rel="noopener noreferrer" title="点击唤起设备自带地图查看位置">🧭 梦想驿站 ↗</a></td><td><a class="overview-reg-link" title="点击直接跳转到报名活动页面" href="weixin://dl/business/?t=nOBQCY1ionv" target="_blank" rel="noopener noreferrer">🔗 weixin://dl/business/?t=nOBQCY1ionv ↗</a></td><td class="edit-only" style="white-space: nowrap;"><button type="button" class="btn sm" title="添加到系统日历提醒" style="margin-right: 6px;">📅 添加至日历</button><button type="button" class="btn sm" style="margin-right: 6px;">查看/编辑</button><button type="button" class="btn danger sm">× 取消活动</button></td></tr><tr><td style="white-space: nowrap;"><span class="overview-datetime-pill">2026/12/06  周日 14:00</span></td><td><span class="cat-tag theme">✨ 主题活动</span></td><td class="overview-title-cell" title="点击跳转到该活动日期">🌟🌟别emo了！这里有个喜剧综艺请你当主角</td><td><a class="overview-map-link" href="https://maps.apple.com/?q=%E6%A2%A6%E6%83%B3%E9%A9%BF%E7%AB%99" target="_blank" rel="noopener noreferrer" title="点击唤起设备自带地图查看位置">🧭 梦想驿站 ↗</a></td><td><a class="overview-reg-link" title="点击直接跳转到报名活动页面" href="weixin://dl/business/?t=5Xdu9alL19o" target="_blank" rel="noopener noreferrer">🔗 weixin://dl/business/?t=5Xdu9alL19o ↗</a></td><td class="edit-only" style="white-space: nowrap;"><button type="button" class="btn sm" title="添加到系统日历提醒" style="margin-right: 6px;">📅 添加至日历</button><button type="button" class="btn sm" style="margin-right: 6px;">查看/编辑</button><button type="button" class="btn danger sm">× 取消活动</button></td></tr><tr><td style="white-space: nowrap;"><span class="overview-datetime-pill">2026/12/06  周日 14:00</span></td><td><span class="cat-tag rehearsal">🎬 日常排练</span></td><td class="overview-title-cell" title="点击跳转到该活动日期">🌟🌟话剧排练｜《归队》招募幕后人才</td><td><a class="overview-map-link" href="https://maps.apple.com/?q=%E5%8D%8A%E6%B7%9E%E5%9B%AD%E8%B7%AF%E8%A1%97%E9%81%93%E5%85%9A%E7%BE%A4%E6%9C%8D%E5%8A%A1%E4%B8%AD%E5%BF%83" target="_blank" rel="noopener noreferrer" title="点击唤起设备自带地图查看位置">🧭 半淞园路街道党群服务中心 ↗</a></td><td><a class="overview-reg-link" title="点击直接跳转到报名活动页面" href="weixin://dl/business/?t=iwqqEUNTwqb" target="_blank" rel="noopener noreferrer">🔗 weixin://dl/business/?t=iwqqEUNTwqb ↗</a></td><td class="edit-only" style="white-space: nowrap;"><button type="button" class="btn sm" title="添加到系统日历提醒" style="margin-right: 6px;">📅 添加至日历</button><button type="button" class="btn sm" style="margin-right: 6px;">查看/编辑</button><button type="button" class="btn danger sm">× 取消活动</button></td></tr><tr><td style="white-space: nowrap;"><span class="overview-datetime-pill">2026/12/12  周六 19:00</span></td><td><span class="cat-tag drama">🎭 话剧演出</span></td><td class="overview-title-cell" title="点击跳转到该活动日期">🌟🌟免费观剧现场招募小演员</td><td><a class="overview-map-link" href="https://maps.apple.com/?q=%E4%B8%8A%E6%B5%B7%E5%AE%9D%E5%B1%B1%E4%B8%87%E8%BE%BE%E5%B9%BF%E5%9C%BA" target="_blank" rel="noopener noreferrer" title="点击唤起设备自带地图查看位置">🧭 上海宝山万达广场 ↗</a></td><td><a class="overview-reg-link" title="点击直接跳转到报名活动页面" href="weixin://dl/business/?t=k1jJMSS0B7i" target="_blank" rel="noopener noreferrer">🔗 weixin://dl/business/?t=k1jJMSS0B7i ↗</a></td><td class="edit-only" style="white-space: nowrap;"><button type="button" class="btn sm" title="添加到系统日历提醒" style="margin-right: 6px;">📅 添加至日历</button><button type="button" class="btn sm" style="margin-right: 6px;">查看/编辑</button><button type="button" class="btn danger sm">× 取消活动</button></td></tr><tr><td style="white-space: nowrap;"><span class="overview-datetime-pill">2026/12/13  周日 14:00</span></td><td><span class="cat-tag theme">✨ 主题活动</span></td><td class="overview-title-cell" title="点击跳转到该活动日期">🌟🌟别emo了！这里有个喜剧综艺请你当主角</td><td><a class="overview-map-link" href="https://maps.apple.com/?q=%E6%A2%A6%E6%83%B3%E9%A9%BF%E7%AB%99" target="_blank" rel="noopener noreferrer" title="点击唤起设备自带地图查看位置">🧭 梦想驿站 ↗</a></td><td><a class="overview-reg-link" title="点击直接跳转到报名活动页面" href="weixin://dl/business/?t=e7l0g4uvZpk" target="_blank" rel="noopener noreferrer">🔗 weixin://dl/business/?t=e7l0g4uvZpk ↗</a></td><td class="edit-only" style="white-space: nowrap;"><button type="button" class="btn sm" title="添加到系统日历提醒" style="margin-right: 6px;">📅 添加至日历</button><button type="button" class="btn sm" style="margin-right: 6px;">查看/编辑</button><button type="button" class="btn danger sm">× 取消活动</button></td></tr><tr><td style="white-space: nowrap;"><span class="overview-datetime-pill">2026/12/13  周日 14:00</span></td><td><span class="cat-tag rehearsal">🎬 日常排练</span></td><td class="overview-title-cell" title="点击跳转到该活动日期">🌟🌟话剧排练｜《归队》招募幕后人才</td><td><a class="overview-map-link" href="https://maps.apple.com/?q=%E5%8D%8A%E6%B7%9E%E5%9B%AD%E8%B7%AF%E8%A1%97%E9%81%93%E5%85%9A%E7%BE%A4%E6%9C%8D%E5%8A%A1%E4%B8%AD%E5%BF%83" target="_blank" rel="noopener noreferrer" title="点击唤起设备自带地图查看位置">🧭 半淞园路街道党群服务中心 ↗</a></td><td><a class="overview-reg-link" title="点击直接跳转到报名活动页面" href="weixin://dl/business/?t=UmfwSicDEqn" target="_blank" rel="noopener noreferrer">🔗 weixin://dl/business/?t=UmfwSicDEqn ↗</a></td><td class="edit-only" style="white-space: nowrap;"><button type="button" class="btn sm" title="添加到系统日历提醒" style="margin-right: 6px;">📅 添加至日历</button><button type="button" class="btn sm" style="margin-right: 6px;">查看/编辑</button><button type="button" class="btn danger sm">× 取消活动</button></td></tr><tr><td style="white-space: nowrap;"><span class="overview-datetime-pill">2026/12/20  周日 14:00</span></td><td><span class="cat-tag theme">✨ 主题活动</span></td><td class="overview-title-cell" title="点击跳转到该活动日期">🌟🌟别emo了！这里有个喜剧综艺请你当主角</td><td><a class="overview-map-link" href="https://maps.apple.com/?q=%E6%A2%A6%E6%83%B3%E9%A9%BF%E7%AB%99" target="_blank" rel="noopener noreferrer" title="点击唤起设备自带地图查看位置">🧭 梦想驿站 ↗</a></td><td><a class="overview-reg-link" title="点击直接跳转到报名活动页面" href="weixin://dl/business/?t=whnt9weiNTn" target="_blank" rel="noopener noreferrer">🔗 weixin://dl/business/?t=whnt9weiNTn ↗</a></td><td class="edit-only" style="white-space: nowrap;"><button type="button" class="btn sm" title="添加到系统日历提醒" style="margin-right: 6px;">📅 添加至日历</button><button type="button" class="btn sm" style="margin-right: 6px;">查看/编辑</button><button type="button" class="btn danger sm">× 取消活动</button></td></tr><tr><td style="white-space: nowrap;"><span class="overview-datetime-pill">2026/12/20  周日 14:00</span></td><td><span class="cat-tag rehearsal">🎬 日常排练</span></td><td class="overview-title-cell" title="点击跳转到该活动日期">🌟🌟话剧排练｜《归队》招募幕后人才</td><td><a class="overview-map-link" href="https://maps.apple.com/?q=%E5%8D%8A%E6%B7%9E%E5%9B%AD%E8%B7%AF%E8%A1%97%E9%81%93%E5%85%9A%E7%BE%A4%E6%9C%8D%E5%8A%A1%E4%B8%AD%E5%BF%83" target="_blank" rel="noopener noreferrer" title="点击唤起设备自带地图查看位置">🧭 半淞园路街道党群服务中心 ↗</a></td><td><a class="overview-reg-link" title="点击直接跳转到报名活动页面" href="weixin://dl/business/?t=BIhmThCgJRt" target="_blank" rel="noopener noreferrer">🔗 weixin://dl/business/?t=BIhmThCgJRt ↗</a></td><td class="edit-only" style="white-space: nowrap;"><button type="button" class="btn sm" title="添加到系统日历提醒" style="margin-right: 6px;">📅 添加至日历</button><button type="button" class="btn sm" style="margin-right: 6px;">查看/编辑</button><button type="button" class="btn danger sm">× 取消活动</button></td></tr><tr><td style="white-space: nowrap;"><span class="overview-datetime-pill">2026/12/27  周日 14:00</span></td><td><span class="cat-tag theme">✨ 主题活动</span></td><td class="overview-title-cell" title="点击跳转到该活动日期">🌟🌟别emo了！这里有个喜剧综艺请你当主角</td><td><a class="overview-map-link" href="https://maps.apple.com/?q=%E6%A2%A6%E6%83%B3%E9%A9%BF%E7%AB%99" target="_blank" rel="noopener noreferrer" title="点击唤起设备自带地图查看位置">🧭 梦想驿站 ↗</a></td><td><a class="overview-reg-link" title="点击直接跳转到报名活动页面" href="weixin://dl/business/?t=z5qlKtezAva" target="_blank" rel="noopener noreferrer">🔗 weixin://dl/business/?t=z5qlKtezAva ↗</a></td><td class="edit-only" style="white-space: nowrap;"><button type="button" class="btn sm" title="添加到系统日历提醒" style="margin-right: 6px;">📅 添加至日历</button><button type="button" class="btn sm" style="margin-right: 6px;">查看/编辑</button><button type="button" class="btn danger sm">× 取消活动</button></td></tr><tr><td style="white-space: nowrap;"><span class="overview-datetime-pill">2026/12/27  周日 14:00</span></td><td><span class="cat-tag rehearsal">🎬 日常排练</span></td><td class="overview-title-cell" title="点击跳转到该活动日期">🌟🌟话剧排练｜《归队》招募幕后人才</td><td><a class="overview-map-link" href="https://maps.apple.com/?q=%E5%8D%8A%E6%B7%9E%E5%9B%AD%E8%B7%AF%E8%A1%97%E9%81%93%E5%85%9A%E7%BE%A4%E6%9C%8D%E5%8A%A1%E4%B8%AD%E5%BF%83" target="_blank" rel="noopener noreferrer" title="点击唤起设备自带地图查看位置">🧭 半淞园路街道党群服务中心 ↗</a></td><td><a class="overview-reg-link" title="点击直接跳转到报名活动页面" href="weixin://dl/business/?t=8CeoQVm20ni" target="_blank" rel="noopener noreferrer">🔗 weixin://dl/business/?t=8CeoQVm20ni ↗</a></td><td class="edit-only" style="white-space: nowrap;"><button type="button" class="btn sm" title="添加到系统日历提醒" style="margin-right: 6px;">📅 添加至日历</button><button type="button" class="btn sm" style="margin-right: 6px;">查看/编辑</button><button type="button" class="btn danger sm">× 取消活动</button></td></tr></tbody>
         </table>
       </div>
     </section>
@@ -1337,21 +1924,22 @@ body:not(.edit-mode) .edit-only {
   <div class="layout">
     <!-- 左侧：日历（含假期与补班标记） -->
     <section class="panel" aria-labelledby="calendar-title">
-      <h2 id="calendar-title" contenteditable="true">活动日历（含中国法定假期与补班标记）</h2>
+      <h2 id="calendar-title" contenteditable="false">活动日历（含中国法定假期与补班标记）</h2>
       <p class="hint">已自动隐藏过去的月份；点击上方「查看月份」按钮可切换单月或全部未过月份，点击日期右侧即显示当日活动小框。</p>
 
       <div class="legend" aria-label="图例">
         <span><i class="key drama">演出</i>话剧演出</span>
         <span><i class="key theme">活动</i>主题活动</span>
+        <span><i class="key rehearsal">排练</i>日常排练</span>
         <span><i class="key holiday">休</i>法定节假日</span>
         <span><i class="key workday">班</i>调休补班日（周末补班）</span>
       </div>
 
-      <div class="months" id="months"></div>
+      <div class="months cols-2" id="months"><section class="month"><h3>2026年 11月</h3><div class="month-grid"><span class="weekday">日</span><span class="weekday">一</span><span class="weekday">二</span><span class="weekday">三</span><span class="weekday">四</span><span class="weekday">五</span><span class="weekday">六</span><button type="button" class="date" data-date="2026-11-01" title="2026-11-01">1</button><button type="button" class="date" data-date="2026-11-02" title="2026-11-02">2</button><button type="button" class="date" data-date="2026-11-03" title="2026-11-03">3</button><button type="button" class="date" data-date="2026-11-04" title="2026-11-04">4</button><button type="button" class="date" data-date="2026-11-05" title="2026-11-05">5</button><button type="button" class="date" data-date="2026-11-06" title="2026-11-06">6</button><button type="button" class="date" data-date="2026-11-07" title="2026-11-07">7</button><button type="button" class="date" data-date="2026-11-08" title="2026-11-08">8</button><button type="button" class="date" data-date="2026-11-09" title="2026-11-09">9</button><button type="button" class="date" data-date="2026-11-10" title="2026-11-10">10</button><button type="button" class="date" data-date="2026-11-11" title="2026-11-11">11</button><button type="button" class="date" data-date="2026-11-12" title="2026-11-12">12</button><button type="button" class="date" data-date="2026-11-13" title="2026-11-13">13</button><button type="button" class="date" data-date="2026-11-14" title="2026-11-14">14</button><button type="button" class="date" data-date="2026-11-15" title="2026-11-15">15</button><button type="button" class="date" data-date="2026-11-16" title="2026-11-16">16</button><button type="button" class="date" data-date="2026-11-17" title="2026-11-17">17</button><button type="button" class="date" data-date="2026-11-18" title="2026-11-18">18</button><button type="button" class="date" data-date="2026-11-19" title="2026-11-19">19</button><button type="button" class="date" data-date="2026-11-20" title="2026-11-20">20</button><button type="button" class="date has-rehearsal" data-date="2026-11-21" title="2026-11-21 | [日常排练] 🌟🌟排练+角色招募｜阿加莎巅峰之作《无人生还》 13:30（长征镇祥和党群服务中心）">21</button><button type="button" class="date" data-date="2026-11-22" title="2026-11-22">22</button><button type="button" class="date" data-date="2026-11-23" title="2026-11-23">23</button><button type="button" class="date" data-date="2026-11-24" title="2026-11-24">24</button><button type="button" class="date" data-date="2026-11-25" title="2026-11-25">25</button><button type="button" class="date" data-date="2026-11-26" title="2026-11-26">26</button><button type="button" class="date" data-date="2026-11-27" title="2026-11-27">27</button><button type="button" class="date has-rehearsal" data-date="2026-11-28" title="2026-11-28 | [日常排练] 🌟🌟排练观摩｜阿加莎巅峰之作《无人生还》 09:30（长征镇祥和党群服务中心）">28</button><button type="button" class="date has-both" data-date="2026-11-29" title="2026-11-29 | [话剧演出] 🌟🌟演读会观众招募｜阿加莎巅峰之作《无人生还》 14:00（长征镇祥和党群服务中心） | [主题活动] 🌟🌟别emo了！这里有个喜剧综艺请你当主角 14:00（梦想驿站）">29</button><button type="button" class="date" data-date="2026-11-30" title="2026-11-30">30</button></div></section><section class="month active"><h3>2026年 12月</h3><div class="month-grid"><span class="weekday">日</span><span class="weekday">一</span><span class="weekday">二</span><span class="weekday">三</span><span class="weekday">四</span><span class="weekday">五</span><span class="weekday">六</span><span></span><span></span><button type="button" class="date" data-date="2026-12-01" title="2026-12-01">1</button><button type="button" class="date" data-date="2026-12-02" title="2026-12-02">2</button><button type="button" class="date" data-date="2026-12-03" title="2026-12-03">3</button><button type="button" class="date" data-date="2026-12-04" title="2026-12-04">4</button><button type="button" class="date" data-date="2026-12-05" title="2026-12-05">5</button><button type="button" class="date has-multi" data-date="2026-12-06" title="2026-12-06 | [主题活动] 🌟🌟别emo了！这里有个喜剧综艺请你当主角 14:00（梦想驿站） | [日常排练] 🌟🌟话剧排练｜《归队》招募幕后人才 14:00（半淞园路街道党群服务中心）">6</button><button type="button" class="date" data-date="2026-12-07" title="2026-12-07">7</button><button type="button" class="date" data-date="2026-12-08" title="2026-12-08">8</button><button type="button" class="date" data-date="2026-12-09" title="2026-12-09">9</button><button type="button" class="date" data-date="2026-12-10" title="2026-12-10">10</button><button type="button" class="date" data-date="2026-12-11" title="2026-12-11">11</button><button type="button" class="date has-drama selected" data-date="2026-12-12" title="2026-12-12 | [话剧演出] 🌟🌟免费观剧现场招募小演员 19:00（上海宝山万达广场）">12</button><button type="button" class="date has-multi" data-date="2026-12-13" title="2026-12-13 | [主题活动] 🌟🌟别emo了！这里有个喜剧综艺请你当主角 14:00（梦想驿站） | [日常排练] 🌟🌟话剧排练｜《归队》招募幕后人才 14:00（半淞园路街道党群服务中心）">13</button><button type="button" class="date" data-date="2026-12-14" title="2026-12-14">14</button><button type="button" class="date" data-date="2026-12-15" title="2026-12-15">15</button><button type="button" class="date" data-date="2026-12-16" title="2026-12-16">16</button><button type="button" class="date" data-date="2026-12-17" title="2026-12-17">17</button><button type="button" class="date" data-date="2026-12-18" title="2026-12-18">18</button><button type="button" class="date" data-date="2026-12-19" title="2026-12-19">19</button><button type="button" class="date has-multi" data-date="2026-12-20" title="2026-12-20 | [主题活动] 🌟🌟别emo了！这里有个喜剧综艺请你当主角 14:00（梦想驿站） | [日常排练] 🌟🌟话剧排练｜《归队》招募幕后人才 14:00（半淞园路街道党群服务中心）">20</button><button type="button" class="date" data-date="2026-12-21" title="2026-12-21">21</button><button type="button" class="date" data-date="2026-12-22" title="2026-12-22">22</button><button type="button" class="date" data-date="2026-12-23" title="2026-12-23">23</button><button type="button" class="date" data-date="2026-12-24" title="2026-12-24">24</button><button type="button" class="date" data-date="2026-12-25" title="2026-12-25">25</button><button type="button" class="date" data-date="2026-12-26" title="2026-12-26">26</button><button type="button" class="date has-multi" data-date="2026-12-27" title="2026-12-27 | [主题活动] 🌟🌟别emo了！这里有个喜剧综艺请你当主角 14:00（梦想驿站） | [日常排练] 🌟🌟话剧排练｜《归队》招募幕后人才 14:00（半淞园路街道党群服务中心）">27</button><button type="button" class="date" data-date="2026-12-28" title="2026-12-28">28</button><button type="button" class="date" data-date="2026-12-29" title="2026-12-29">29</button><button type="button" class="date" data-date="2026-12-30" title="2026-12-30">30</button><button type="button" class="date" data-date="2026-12-31" title="2026-12-31">31</button></div></section></div>
 
       <div class="calendar-footer-bar edit-only">
         <div class="calendar-footer-row">
-          <strong>当前选中日期：<span id="selected-date-label" class="selected-date-pill">2026年11月22日 周日</span></strong>
+          <strong>当前选中日期：<span id="selected-date-label" class="selected-date-pill has-drama">2026年12月12日 周六</span></strong>
           <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;">
             <label for="day-status-select">假期/补班标记：</label>
             <select id="day-status-select" style="padding:4px 8px;border-radius:6px;border:1px solid var(--line);">
@@ -1364,7 +1952,7 @@ body:not(.edit-mode) .edit-only {
         </div>
         <div class="calendar-footer-row">
           <button type="button" class="btn primary sm" id="cal-add-activity-btn">+ 在选中日期添加活动</button>
-          <button type="button" class="btn danger sm" id="cal-cancel-all-btn">× 取消 2026-11-22 的全部活动 (1场)</button>
+          <button type="button" class="btn danger sm" id="cal-cancel-all-btn">× 取消 2026-12-12 的全部活动 (1场)</button>
         </div>
       </div>
     </section>
@@ -1374,19 +1962,19 @@ body:not(.edit-mode) .edit-only {
       <div class="right-top-bar">
         <div>
           <h2 id="right-panel-title">当日活动信息与活动流程</h2>
-          <p class="hint">每个活动独立一个小框；支持设备自带地图导航、直接计算「开始时间 + 时长」、一键移除流程表及实时保存。</p>
+          <p class="hint" id="right-panel-hint">点击左侧日历日期可查看当日活动详情；直接点击「报名链接」即可跳转到报名活动页面，支持一键唤起地图导航。</p>
         </div>
         <div class="date-nav">
           <button type="button" class="btn sm" id="prev-day-btn" title="前一天">‹</button>
-          <input type="date" id="date-picker" aria-label="选择日期">
+          <input type="date" id="date-picker" aria-label="选择日期" class="has-drama">
           <button type="button" class="btn sm" id="next-day-btn" title="后一天">›</button>
-          <button type="button" class="btn save-btn sm" id="right-save-btn" title="保存全部修改">💾 保存</button>
+          <button type="button" class="btn save-btn sm edit-only" id="right-save-btn" title="保存全部修改">💾 保存</button>
           <button type="button" class="btn primary sm edit-only" id="right-add-activity-btn">+ 添加活动</button>
         </div>
       </div>
 
       <!-- 抽屉 1：手动添加活动表单 -->
-      <div class="drawer-box" id="add-activity-drawer" hidden="">
+      <div class="drawer-box edit-only" id="add-activity-drawer" hidden="">
         <h4>
           <span>+ 添加新活动（话剧演出 / 主题活动）</span>
           <button type="button" class="btn sm" id="close-add-drawer-btn">关闭</button>
@@ -1405,6 +1993,7 @@ body:not(.edit-mode) .edit-only {
             <select id="form-act-category">
               <option value="drama">🎭 话剧演出</option>
               <option value="theme">✨ 主题活动</option>
+              <option value="rehearsal">🎬 日常排练</option>
             </select>
           </label>
           <label class="full">
@@ -1416,18 +2005,18 @@ body:not(.edit-mode) .edit-only {
             <input type="text" id="form-act-location" placeholder="例如：上海·静安区壹出好戏排演剧场（南京西路商圈）">
           </label>
           <label class="full">
-            <span>🔗 报名链接（支持直接粘贴粗门小程序分享内容自动提取链接）</span>
+            <span>🔗 报名链接（支持直接粘贴粗门小程序分享内容或有效报名链接）</span>
             <input type="text" id="form-act-link" value="#小程序://粗门/IX7JsenQZCDoTot">
           </label>
         </div>
         <div style="display:flex;gap:8px;align-items:center;">
           <button type="button" class="btn primary sm" id="submit-add-activity-btn">✓ 确认添加并保存</button>
-          <span class="hint">添加后将在右侧生成独立活动小框，并自动格式化时间与地图链接</span>
+          <span class="hint">添加后将在右侧生成独立活动小框，预览/导出页面中点击报名链接可直接跳转</span>
         </div>
       </div>
 
       <!-- 抽屉 2：粗门小程序文本智能解析器 -->
-      <div class="drawer-box" id="cumen-parse-drawer" hidden="">
+      <div class="drawer-box edit-only" id="cumen-parse-drawer" hidden="">
         <h4>
           <span>🔗 粗门小程序活动信息抓取与同步 / 分享文案智能解析</span>
           <button type="button" class="btn sm" id="close-parse-drawer-btn">关闭</button>
@@ -1457,8 +2046,8 @@ body:not(.edit-mode) .edit-only {
       </div>
 
       <!-- 选中日期横幅（有话剧演出时显示橙色背景，有主题活动时显示宝蓝色背景） -->
-      <div class="day-banner" id="day-banner">
-        <span id="day-banner-date">2026年11月22日 星期日</span>
+      <div class="day-banner has-drama" id="day-banner">
+        <span id="day-banner-date">2026年12月12日 星期六</span>
         <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;">
           <span id="day-holiday-badge" hidden=""></span>
           <span id="day-activity-count" style="font-size:12px;">当日共 1 个活动小框</span>
@@ -1466,17 +2055,21 @@ body:not(.edit-mode) .edit-only {
       </div>
 
       <!-- 当日活动小框容器 -->
-      <div class="activity-cards-list" id="activity-cards-container"></div>
+      <div class="activity-cards-list" id="activity-cards-container"><article class="activity-box cat-drama"><div class="activity-box-header"><div style="display: flex; align-items: center; gap: 8px;"><span class="cat-tag drama">🎭 话剧演出</span><select class="edit-only" style="font-size: 12px; padding: 2px 6px; border-radius: 6px; border: 1px solid var(--line);">
+      <option value="drama" selected="">切换为：话剧演出</option>
+      <option value="theme">切换为：主题活动</option>
+      <option value="rehearsal">切换为：日常排练</option>
+    </select></div><div class="activity-box-actions edit-only"><button type="button" class="btn accent sm edit-only">+ 增加活动流程</button><button type="button" class="btn danger sm edit-only">× 取消活动</button></div></div><div class="info-grid"><div class="info-row"><span class="info-label">活动名称：</span><div class="info-val title-val" contenteditable="false">🌟🌟免费观剧现场招募小演员</div></div><div class="info-row"><span class="info-label">活动时间：</span><div class="info-val time-val" contenteditable="false">2026/12/12  周六 19:00</div><button type="button" class="map-link-btn cal-btn" title="一键导出并添加至手机/电脑系统日历（iPhone、安卓、Mac、Windows等设备均支持提醒）">📅 添加至日历</button></div><div class="info-row"><span class="info-label">活动地点：</span><div class="info-val" contenteditable="false">上海宝山万达广场</div><a class="map-link-btn native-map" href="https://maps.apple.com/?q=%E4%B8%8A%E6%B5%B7%E5%AE%9D%E5%B1%B1%E4%B8%87%E8%BE%BE%E5%B9%BF%E5%9C%BA" target="_blank" rel="noopener noreferrer" title="调用设备自带地图（Apple 地图 / 系统原生地图）导航至此地点">🧭 设备自带地图</a><a class="map-link-btn" href="https://uri.amap.com/search?keyword=%E4%B8%8A%E6%B5%B7%E5%AE%9D%E5%B1%B1%E4%B8%87%E8%BE%BE%E5%B9%BF%E5%9C%BA" target="_blank" rel="noopener noreferrer" title="在高德地图中打开此活动地点">📍 高德地图</a><a class="map-link-btn" href="https://api.map.baidu.com/geocoder?address=%E4%B8%8A%E6%B5%B7%E5%AE%9D%E5%B1%B1%E4%B8%87%E8%BE%BE%E5%B9%BF%E5%9C%BA&amp;output=html" target="_blank" rel="noopener noreferrer" title="在百度地图中打开此活动地点">🗺️ 百度地图</a></div><div class="info-row"><span class="info-label">报名链接：</span><a class="info-val link-val reg-link-anchor" title="点击链接直接跳转到报名活动页面" href="weixin://dl/business/?t=k1jJMSS0B7i" target="_blank" rel="noopener noreferrer"><span>🔗 weixin://dl/business/?t=k1jJMSS0B7i</span><span style="font-size:12px;font-weight:800;white-space:nowrap;">点击报名 ↗</span></a><button type="button" class="btn sm">复制链接</button></div></div></article></div>
     </section>
   </div>
 </main>
 
 <!-- 初始默认数据（含 2026-2027 法定节假日与补班、预设剧目与主题活动） -->
 <script type="application/json" id="initial-data">{
-  "savedAt": 1795097500000,
+  "savedAt": 1795408072298,
   "activePeriod": "2026",
   "activeMonth": "ALL",
-  "selectedDate": "2026-11-22",
+  "selectedDate": "2026-12-12",
   "uiText": {
     "ui-eyebrow": "壹出好戏剧团 · 2026—2027 近期活动一览与日程表",
     "ui-badge": "话剧演出 · 主题活动 · 法定节假日与补班标记",
@@ -1572,62 +2165,147 @@ body:not(.edit-mode) .edit-only {
   "customDayStatus": {},
   "activities": [
     {
-      "id": "act-20261122-1",
-      "date": "2026-11-29",
-      "time": "14:00",
-      "category": "drama",
-      "title": "话剧演读会《无人生还》",
-      "location": "上海·普陀区真光路1433弄1号2楼",
-      "link": "#小程序://粗门/IX7JsenQZCDoTot",
+      "id": "act-mwp1ajpl-w7j",
+      "date": "2026-11-21",
+      "time": "13:30",
+      "category": "rehearsal",
+      "title": "🌟🌟排练+角色招募｜阿加莎巅峰之作《无人生还》",
+      "location": "长征镇祥和党群服务中心",
+      "link": "https://wxmpurl.cn/xbcwN3hutPu",
       "showFlow": false,
       "flowRows": []
     },
     {
-      "id": "act-20261129-1",
-      "date": "2026-11-22",
+      "id": "act-mwqo1huj-8zv",
+      "date": "2026-11-28",
+      "time": "09:30",
+      "category": "rehearsal",
+      "title": "🌟🌟排练观摩｜阿加莎巅峰之作《无人生还》",
+      "location": "长征镇祥和党群服务中心",
+      "link": "weixin://dl/business/?t=1c5sfrX7k5u",
+      "showFlow": false,
+      "flowRows": []
+    },
+    {
+      "id": "act-mwqo1zxw-zzy",
+      "date": "2026-11-29",
       "time": "14:00",
       "category": "drama",
-      "title": "话剧演读会《无人生还》",
-      "location": "上海·静安区壹出好戏排演剧场",
-      "link": "#小程序://粗门/IX7JsenQZCDoTot",
+      "title": "🌟🌟演读会观众招募｜阿加莎巅峰之作《无人生还》",
+      "location": "长征镇祥和党群服务中心",
+      "link": "weixin://dl/business/?t=vryB0af0P3b",
       "showFlow": false,
-      "flowRows": [
-        {
-          "startTime": "14:00",
-          "startFormula": "",
-          "duration": "15分钟",
-          "durationFormula": "",
-          "content": "主持人开场"
-        },
-        {
-          "startTime": "14:15",
-          "startFormula": "=A1+B1",
-          "duration": "15分钟",
-          "durationFormula": "",
-          "content": "破冰游戏"
-        },
-        {
-          "startTime": "14:30",
-          "startFormula": "=A2+B2",
-          "duration": "60分钟",
-          "durationFormula": "",
-          "content": "《无人生还》上半场剧本围读展演"
-        },
-        {
-          "startTime": "15:30",
-          "startFormula": "=A3+B3",
-          "duration": "15分钟",
-          "durationFormula": "",
-          "content": "中场休息 & 自由茶歇"
-        },
-        {
-          "startTime": "15:45",
-          "startFormula": "=A4+B4",
-          "duration": "60分钟",
-          "durationFormula": "",
-          "content": "《无人生还》下半场高潮对戏与谢幕合影"
-        }
-      ]
+      "flowRows": []
+    },
+    {
+      "id": "act-mws49x4j-ogp",
+      "date": "2026-11-29",
+      "time": "14:00",
+      "category": "theme",
+      "title": "🌟🌟别emo了！这里有个喜剧综艺请你当主角",
+      "location": "梦想驿站",
+      "link": "weixin://dl/business/?t=nOBQCY1ionv",
+      "showFlow": false,
+      "flowRows": []
+    },
+    {
+      "id": "act-mws4b7bf-ubn",
+      "date": "2026-12-06",
+      "time": "14:00",
+      "category": "theme",
+      "title": "🌟🌟别emo了！这里有个喜剧综艺请你当主角",
+      "location": "梦想驿站",
+      "link": "weixin://dl/business/?t=5Xdu9alL19o",
+      "showFlow": false,
+      "flowRows": []
+    },
+    {
+      "id": "act-mws4di8n-6bz",
+      "date": "2026-12-13",
+      "time": "14:00",
+      "category": "theme",
+      "title": "🌟🌟别emo了！这里有个喜剧综艺请你当主角",
+      "location": "梦想驿站",
+      "link": "weixin://dl/business/?t=e7l0g4uvZpk",
+      "showFlow": false,
+      "flowRows": []
+    },
+    {
+      "id": "act-mws4drem-7ry",
+      "date": "2026-12-20",
+      "time": "14:00",
+      "category": "theme",
+      "title": "🌟🌟别emo了！这里有个喜剧综艺请你当主角",
+      "location": "梦想驿站",
+      "link": "weixin://dl/business/?t=whnt9weiNTn",
+      "showFlow": false,
+      "flowRows": []
+    },
+    {
+      "id": "act-mws4dyjc-l9f",
+      "date": "2026-12-27",
+      "time": "14:00",
+      "category": "theme",
+      "title": "🌟🌟别emo了！这里有个喜剧综艺请你当主角",
+      "location": "梦想驿站",
+      "link": "weixin://dl/business/?t=z5qlKtezAva",
+      "showFlow": false,
+      "flowRows": []
+    },
+    {
+      "id": "act-mws4e77t-56u",
+      "date": "2026-12-06",
+      "time": "14:00",
+      "category": "rehearsal",
+      "title": "🌟🌟话剧排练｜《归队》招募幕后人才",
+      "location": "半淞园路街道党群服务中心",
+      "link": "weixin://dl/business/?t=iwqqEUNTwqb",
+      "showFlow": false,
+      "flowRows": []
+    },
+    {
+      "id": "act-mws4envh-y19",
+      "date": "2026-12-20",
+      "time": "14:00",
+      "category": "rehearsal",
+      "title": "🌟🌟话剧排练｜《归队》招募幕后人才",
+      "location": "半淞园路街道党群服务中心",
+      "link": "weixin://dl/business/?t=BIhmThCgJRt",
+      "showFlow": false,
+      "flowRows": []
+    },
+    {
+      "id": "act-mws4eto1-ier",
+      "date": "2026-12-27",
+      "time": "14:00",
+      "category": "rehearsal",
+      "title": "🌟🌟话剧排练｜《归队》招募幕后人才",
+      "location": "半淞园路街道党群服务中心",
+      "link": "weixin://dl/business/?t=8CeoQVm20ni",
+      "showFlow": false,
+      "flowRows": []
+    },
+    {
+      "id": "act-mws4ezgz-xbp",
+      "date": "2026-12-13",
+      "time": "14:00",
+      "category": "rehearsal",
+      "title": "🌟🌟话剧排练｜《归队》招募幕后人才",
+      "location": "半淞园路街道党群服务中心",
+      "link": "weixin://dl/business/?t=UmfwSicDEqn",
+      "showFlow": false,
+      "flowRows": []
+    },
+    {
+      "id": "act-mws4hyjp-4rg",
+      "date": "2026-12-12",
+      "time": "19:00",
+      "category": "drama",
+      "title": "🌟🌟免费观剧现场招募小演员",
+      "location": "上海宝山万达广场",
+      "link": "weixin://dl/business/?t=k1jJMSS0B7i",
+      "showFlow": false,
+      "flowRows": []
     }
   ]
 }</script>
@@ -1638,6 +2316,11 @@ body:not(.edit-mode) .edit-only {
 const STORAGE_KEY = 'yichuhaoxi-simplified-activities-v9';
 const NEW_INTRO_TEXT = '“壹出好戏”剧团，简称壹出好戏，成立于2024年。以“壹出好戏，永不停戏”为口号，聚集了导演、演员、摄影、摄像、舞美、传播、商务等领域人才，为爱发电，只为舞台上的梦想。壹出好戏剧团是一个一起开心演戏，建立友谊，制造乐趣的社群。秉持着“自由”与“开放”的文化，欢迎每一个有热情，有梦想的朋友。';
 
+/* 判断当前文件是否为导出后的只读预览文件 */
+const IS_READONLY =
+  document.documentElement.getAttribute('data-readonly') === 'true' ||
+  document.body.classList.contains('readonly-export');
+
 const byId = id => document.getElementById(id);
 const weekdays = ['日', '一', '二', '三', '四', '五', '六'];
 const dayMs = 86400000;
@@ -1646,10 +2329,11 @@ const parseDate = d => new Date(d + 'T00:00:00Z');
 const isoDate = d => d.toISOString().slice(0, 10);
 const addDays = (d, n) => isoDate(new Date(parseDate(d).getTime() + n * dayMs));
 const fmtDate = (d, opts) => new Intl.DateTimeFormat('zh-CN', { ...opts, timeZone: 'UTC' }).format(parseDate(d));
+const escapeHtml = s => String(s || '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
 
 const uiTextIds = ['ui-eyebrow', 'ui-badge', 'ui-main-title', 'ui-slogan', 'ui-intro-body', 'calendar-title'];
 
-/* 仅保留 2026 与 2027 单年，已移除双年全景 */
+/* 仅保留 2026 与 2027 单年 */
 const periods = {
   '2026': { start: '2026-01-01', end: '2026-12-31', months: Array.from({ length: 12 }, (_, m) => [2026, m]) },
   '2027': { start: '2027-01-01', end: '2027-12-31', months: Array.from({ length: 12 }, (_, m) => [2027, m]) }
@@ -1661,7 +2345,7 @@ function getMinVisibleYearMonth() {
   const y = now.getFullYear();
   const m = now.getMonth(); // 0-11
   if (y < 2026 || (y === 2026 && m < 10)) {
-    return { year: 2026, monthIdx: 10 }; // 2026年11月之前（1-10月）视为已过去月份
+    return { year: 2026, monthIdx: 10 };
   }
   return { year: y, monthIdx: m };
 }
@@ -1716,11 +2400,890 @@ function getBaiduMapUrl(locationStr) {
   return `https://api.map.baidu.com/geocoder?address=${q}&output=html`;
 }
 
+/* ==================== 报名链接识别、解析与直接跳转引擎 ==================== */
+/* 判断并提取可直接由浏览器跳转的外部 URL（http / https / weixin / 域名） */
+function resolveDirectExternalUrl(rawLink) {
+  const s = String(rawLink || '').trim();
+  if (!s) return null;
+
+  // 1. 直接以 http://, https://, weixin:// 开头
+  if (/^(?:https?:\/\/|weixin:\/\/)/i.test(s)) {
+    return s;
+  }
+  // 2. 文本内包含 http://, https://, weixin://
+  const embeddedUrl = s.match(/(?:https?:\/\/|weixin:\/\/)[^\s\n\r，。；！？"\'<>（）()【】\[\]]+/i);
+  if (embeddedUrl) {
+    let clean = embeddedUrl[0].trim();
+    clean = clean.replace(/[，。；！？,.!?"'<>）)\]]+$/, '');
+    return clean;
+  }
+  // 3. 以 // 开头
+  if (s.startsWith('//')) {
+    return 'https:' + s;
+  }
+  // 4. 不含 #小程序 且符合域名路径格式（如 wxaurl.cn/xxx, www.cumen.com/xxx）
+  if (!s.includes('小程序') && !s.startsWith('#') && /^[a-zA-Z0-9][-a-zA-Z0-9]*\.[a-zA-Z]{2,}(?:\/[^\s]*)?$/.test(s)) {
+    return 'https://' + s;
+  }
+  return null;
+}
+
+/* 获取报名链接用于 <a> 标签的 href 属性 */
+function getRegistrationLinkHref(act) {
+  const raw = (act && act.link ? String(act.link).trim() : '') || '#小程序://粗门/IX7JsenQZCDoTot';
+  const directUrl = resolveDirectExternalUrl(raw);
+  if (directUrl) return directUrl;
+  // 若为 #小程序://粗门/... 等小程序口令链接，生成带活动参数的专属报名页锚点并通过点击事件直接打开报名活动页面
+  return raw;
+}
+
+/* 当报名链接为 #小程序://粗门/... 时，构建并直接打开该场活动的专属报名活动页面 */
+function openMiniProgramRegistrationPage(act) {
+  const title = act.title || '话剧演读会《无人生还》';
+  const dtStr = formatActivityDateTime(act.date, getActivityTime(act));
+  const loc = act.location || '上海·壹出好戏排演剧场';
+  const rawLink = (act.link && String(act.link).trim()) || '#小程序://粗门/IX7JsenQZCDoTot';
+  const isDrama = act.category !== 'theme';
+  const catLabel = isDrama ? '🎭 话剧演出' : '✨ 主题活动';
+  const accentColor = isDrama ? '#f97316' : '#1d4ed8';
+  const accentSoft = isDrama ? '#fff7ed' : '#eff6ff';
+  const nativeMap = getNativeMapUrl(loc);
+  const amap = getAmapUrl(loc);
+
+  // 自动复制小程序口令到剪贴板，方便进入微信后直接使用
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(rawLink).catch(() => {});
+  }
+
+  let flowHtml = '';
+  if (act.showFlow && Array.isArray(act.flowRows) && act.flowRows.length > 0) {
+    const rowsHtml = act.flowRows.map((r, i) => `
+      <tr>
+        <td style="padding:8px 10px;border-bottom:1px solid #e2e8f0;text-align:center;color:#64748b;font-weight:700;">${i + 1}</td>
+        <td style="padding:8px 10px;border-bottom:1px solid #e2e8f0;text-align:center;font-weight:800;color:#1d4ed8;background:#eff6ff;">${escapeHtml(r.startTime || '')}</td>
+        <td style="padding:8px 10px;border-bottom:1px solid #e2e8f0;text-align:center;">${escapeHtml(r.duration || '')}</td>
+        <td style="padding:8px 10px;border-bottom:1px solid #e2e8f0;">${escapeHtml(r.content || '')}</td>
+      </tr>
+    `).join('');
+    flowHtml = `
+      <div style="margin-top:20px;padding-top:16px;border-top:1px dashed #cbd5e1;">
+        <h3 style="margin:0 0 10px;font-size:15px;color:#1e293b;">📋 活动流程安排</h3>
+        <table style="width:100%;border-collapse:collapse;font-size:13px;border:1px solid #cbd5e1;border-radius:8px;overflow:hidden;">
+          <thead>
+            <tr style="background:#f1f5f9;color:#334155;">
+              <th style="padding:8px;width:42px;">#</th>
+              <th style="padding:8px;width:90px;">开始时间</th>
+              <th style="padding:8px;width:80px;">时长</th>
+              <th style="padding:8px;text-align:left;">活动内容</th>
+            </tr>
+          </thead>
+          <tbody>${rowsHtml}</tbody>
+        </table>
+      </div>
+    `;
+  }
+
+  const pageHtml = `<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>报名活动页面 · ${escapeHtml(title)} · 壹出好戏剧团</title>
+<style>
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    font: 14px/1.6 -apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei", sans-serif;
+    background: #f1f5f9;
+    color: #1c1917;
+    padding: 24px 16px 48px;
+  }
+  .reg-container {
+    max-width: 680px;
+    margin: 0 auto;
+    background: #ffffff;
+    border-radius: 18px;
+    box-shadow: 0 10px 30px rgba(15, 23, 42, 0.08);
+    overflow: hidden;
+    border: 1px solid #e2e8f0;
+  }
+  .reg-hero {
+    background: ${accentColor};
+    color: #ffffff;
+    padding: 24px 26px;
+  }
+  .reg-hero-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin-bottom: 10px;
+  }
+  .reg-cat-pill {
+    background: rgba(255,255,255,0.22);
+    border: 1px solid rgba(255,255,255,0.4);
+    padding: 3px 12px;
+    border-radius: 999px;
+    font-size: 12px;
+    font-weight: 800;
+  }
+  .reg-status-pill {
+    background: #dcfce7;
+    color: #15803d;
+    padding: 3px 10px;
+    border-radius: 999px;
+    font-size: 12px;
+    font-weight: 800;
+  }
+  .reg-hero h1 {
+    margin: 0;
+    font-size: clamp(20px, 3vw, 26px);
+    line-height: 1.3;
+  }
+  .reg-body {
+    padding: 24px 26px;
+  }
+  .meta-card {
+    background: ${accentSoft};
+    border: 1px solid #cbd5e1;
+    border-left: 5px solid ${accentColor};
+    border-radius: 12px;
+    padding: 14px 16px;
+    display: grid;
+    gap: 10px;
+    margin-bottom: 20px;
+  }
+  .meta-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+    font-size: 14px;
+  }
+  .meta-label {
+    color: #57534e;
+    font-weight: 700;
+    min-width: 78px;
+  }
+  .meta-val {
+    font-weight: 800;
+    color: #111827;
+  }
+  .time-badge {
+    background: #dbeafe;
+    color: #1d4ed8;
+    border: 1px solid #93c5fd;
+    padding: 2px 10px;
+    border-radius: 6px;
+    font-variant-numeric: tabular-nums;
+    white-space: pre;
+  }
+  .cumen-box {
+    background: #f8fafc;
+    border: 1.5px solid #93c5fd;
+    border-radius: 12px;
+    padding: 16px;
+    margin-bottom: 20px;
+  }
+  .cumen-token {
+    font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+    font-size: 13.5px;
+    font-weight: 800;
+    color: #1d4ed8;
+    background: #dbeafe;
+    border: 1px solid #93c5fd;
+    padding: 8px 12px;
+    border-radius: 8px;
+    word-break: break-all;
+    margin: 8px 0 12px;
+  }
+  .btn-row {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+  .btn {
+    height: 38px;
+    padding: 0 16px;
+    border-radius: 9px;
+    border: 1px solid #cbd5e1;
+    background: #ffffff;
+    color: #1c1917;
+    font-size: 13.5px;
+    font-weight: 750;
+    cursor: pointer;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .btn.primary {
+    background: #1d4ed8;
+    border-color: #1d4ed8;
+    color: #ffffff;
+  }
+  .btn.wechat {
+    background: #16a34a;
+    border-color: #16a34a;
+    color: #ffffff;
+  }
+  .form-card {
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+    padding: 18px;
+    background: #ffffff;
+  }
+  .form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin-bottom: 12px;
+  }
+  .form-row label {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    font-size: 12.5px;
+    font-weight: 700;
+    color: #475569;
+  }
+  .form-row input, .form-row select {
+    height: 36px;
+    padding: 0 10px;
+    border: 1px solid #cbd5e1;
+    border-radius: 7px;
+    font-size: 13.5px;
+  }
+  .success-banner {
+    display: none;
+    margin-top: 12px;
+    padding: 12px 14px;
+    border-radius: 8px;
+    background: #dcfce7;
+    color: #166534;
+    border: 1px solid #86efac;
+    font-weight: 750;
+  }
+  @media (max-width: 560px) {
+    .form-row { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+  <div class="reg-container">
+    <div class="reg-hero">
+      <div class="reg-hero-top">
+        <span class="reg-cat-pill">壹出好戏剧团 · ${catLabel}</span>
+        <span class="reg-status-pill">● 报名通道开启中</span>
+      </div>
+      <h1>${escapeHtml(title)}</h1>
+    </div>
+    <div class="reg-body">
+      <div class="meta-card">
+        <div class="meta-item">
+          <span class="meta-label">🕒 活动时间：</span>
+          <span class="meta-val time-badge">${escapeHtml(dtStr)}</span>
+          <button type="button" class="btn" style="height:26px;padding:0 10px;font-size:11.5px;background:#fdf4ff;color:#a21caf;border:1px solid #f5d0fe;cursor:pointer;font-weight:700;" id="modal-cal-btn">📅 添加至手机/电脑日历</button>
+        </div>
+        <div class="meta-item">
+          <span class="meta-label">📍 活动地点：</span>
+          <span class="meta-val">${escapeHtml(loc)}</span>
+          <a class="btn" style="height:26px;padding:0 8px;font-size:11.5px;" href="${nativeMap}" target="_blank" rel="noopener noreferrer">🧭 设备地图导航</a>
+          <a class="btn" style="height:26px;padding:0 8px;font-size:11.5px;" href="${amap}" target="_blank" rel="noopener noreferrer">📍 高德地图</a>
+        </div>
+      </div>
+
+      <div class="cumen-box">
+        <div style="font-weight:800;color:#1e3a8a;font-size:14px;">🔗 粗门小程序报名通道（口令已自动复制）</div>
+        <div class="cumen-token" id="token-text">${escapeHtml(rawLink)}</div>
+        <div class="btn-row">
+          <a class="btn wechat" href="weixin://" id="launch-wx-btn">💬 打开微信进入粗门小程序报名</a>
+          <button type="button" class="btn primary" id="copy-token-btn">📋 再次复制小程序报名链接</button>
+        </div>
+        <div style="font-size:12px;color:#64748b;margin-top:8px;" id="copy-tip">
+          💡 已为您自动复制报名链接 <code>${escapeHtml(rawLink)}</code>，点击上方「打开微信」在微信内粘贴并点击即可直达粗门小程序活动页。
+        </div>
+      </div>
+
+      <div class="form-card">
+        <h3 style="margin:0 0 12px;font-size:15px;color:#0f172a;">✍️ 在线快速报名登记</h3>
+        <form id="quick-reg-form">
+          <div class="form-row">
+            <label>
+              <span>您的昵称 / 姓名 *</span>
+              <input type="text" required placeholder="请输入您的称呼">
+            </label>
+            <label>
+              <span>微信号 / 手机号 *</span>
+              <input type="text" required placeholder="方便剧团主理人联系您">
+            </label>
+          </div>
+          <div class="form-row">
+            <label>
+              <span>报名人数</span>
+              <select>
+                <option value="1">1 人</option>
+                <option value="2">2 人（结伴同行）</option>
+                <option value="3">3 人及以上</option>
+              </select>
+            </label>
+            <label>
+              <span>参与意向</span>
+              <select>
+                <option value="actor">体验演读 / 互动参与</option>
+                <option value="audience">沉浸观演 / 交友互动</option>
+              </select>
+            </label>
+          </div>
+          <button type="submit" class="btn primary" style="width:100%;justify-content:center;">✓ 立即提交报名</button>
+          <div class="success-banner" id="reg-success-msg">
+            🎉 报名登记已提交成功！小程序报名口令已复制，您也可以点击上方绿色按钮在微信「粗门」小程序中查看凭证。
+          </div>
+        </form>
+      </div>
+
+      ${flowHtml}
+    </div>
+  </div>
+  <!-- 会员专属权益海报模态弹窗 -->
+  <div class="modal-overlay" id="vip-modal-overlay">
+    <div class="modal-card">
+      <div class="modal-card-header">
+        <span class="modal-card-title">👑 壹出好戏剧团 · 年度会员</span>
+        <button type="button" class="modal-card-close" id="close-vip-modal-btn" aria-label="关闭">&times;</button>
+      </div>
+      <div class="modal-card-body">
+        <img class="modal-vip-poster" src="年度会员 2.png" alt="壹出好戏剧团年度会员海报" onerror="this.onerror=null;this.src='年度会员.png';">
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const tokenStr = ${JSON.stringify(rawLink)};
+    document.getElementById('copy-token-btn').onclick = function() {
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(tokenStr);
+      }
+      this.textContent = '✓ 已复制报名链接';
+      setTimeout(() => { this.textContent = '📋 再次复制小程序报名链接'; }, 1600);
+    };
+    document.getElementById('launch-wx-btn').onclick = function() {
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(tokenStr);
+      }
+    };
+    document.getElementById('quick-reg-form').onsubmit = function(e) {
+      e.preventDefault();
+      document.getElementById('reg-success-msg').style.display = 'block';
+    };
+    const calData = ${JSON.stringify(act)};
+    const modalCalBtn = document.getElementById('modal-cal-btn');
+    if (modalCalBtn) {
+      modalCalBtn.onclick = function() {
+        if (window.opener && window.opener.addActivityToCalendar) {
+          window.opener.addActivityToCalendar(calData, modalCalBtn);
+          return;
+        }
+        const title = (calData.title || '壹出好戏剧团活动').replace(/\r?\n/g, ' ');
+        const loc = (calData.location || '上海·壹出好戏排演剧场').replace(/\r?\n/g, ' ');
+        const rawDate = (calData.date || '2026-11-22');
+        const rawDatePlain = rawDate.replace(/-/g, '');
+        const tRaw = (calData.time || '14:00').replace(/[:：]/g, '');
+        const dtStart = rawDatePlain + 'T' + (tRaw.length === 4 ? tRaw + '00' : '140000');
+        const sh = parseInt(tRaw.slice(0, 2) || '14', 10);
+        const sm = tRaw.slice(2, 4) || '00';
+        const dtEnd = rawDatePlain + 'T' + String(sh + 2).padStart(2, '0') + sm + '00';
+
+        const ics = [
+          'BEGIN:VCALENDAR',
+          'VERSION:2.0',
+          'PRODID:-//YI CHU HAO XI//Drama Calendar//CN',
+          'CALSCALE:GREGORIAN',
+          'METHOD:PUBLISH',
+          'BEGIN:VEVENT',
+          'SUMMARY:🎭 壹出好戏剧团 · ' + title,
+          'DTSTART:' + dtStart,
+          'DTEND:' + dtEnd,
+          'LOCATION:' + loc,
+          'DESCRIPTION:壹出好戏剧团演出活动排期\\n地点：' + loc + '\\n链接：' + (calData.link || ''),
+          'STATUS:CONFIRMED',
+          'BEGIN:VALARM',
+          'ACTION:DISPLAY',
+          'DESCRIPTION:剧团活动即将于15分钟后开始：' + title,
+          'TRIGGER:-PT15M',
+          'END:VALARM',
+          'BEGIN:VALARM',
+          'ACTION:DISPLAY',
+          'DESCRIPTION:距离活动开始还有2小时：' + title,
+          'TRIGGER:-PT2H',
+          'END:VALARM',
+          'BEGIN:VALARM',
+          'ACTION:DISPLAY',
+          'DESCRIPTION:明日剧团活动提醒：' + title,
+          'TRIGGER:-P1D',
+          'END:VALARM',
+          'END:VEVENT',
+          'END:VCALENDAR'
+        ].join('\\r\\n');
+
+        const ua = navigator.userAgent || '';
+        const isIOS = /iPad|iPhone|iPod/.test(ua) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+        const isAndroid = /Android/i.test(ua);
+
+        if (isAndroid) {
+          const parts = rawDate.split('-');
+          const sObj = new Date(parseInt(parts[0], 10), parseInt(parts[1], 10) - 1, parseInt(parts[2], 10), sh, parseInt(sm, 10));
+          const eObj = new Date(sObj.getTime() + 120 * 60 * 1000);
+          const intent = 'intent://com.android.calendar/event#Intent;action=android.intent.action.INSERT;type=vnd.android.cursor.dir/event;title=' + encodeURIComponent('🎭 壹出好戏剧团 · ' + title) + ';eventLocation=' + encodeURIComponent(loc) + ';beginTime=' + sObj.getTime() + ';endTime=' + eObj.getTime() + ';hasAlarm=1;end';
+          window.location.href = intent;
+          return;
+        }
+
+        if (isIOS) {
+          const dataUri = 'data:text/calendar;charset=utf-8,' + encodeURIComponent(ics);
+          const a = document.createElement('a');
+          a.href = dataUri;
+          a.target = '_self';
+          document.body.appendChild(a);
+          a.click();
+          document.body.removeChild(a);
+          return;
+        }
+
+        const b = new Blob([ics], { type: 'text/calendar;charset=utf-8' });
+        const a = document.createElement('a');
+        a.href = URL.createObjectURL(b);
+        a.download = '壹出好戏剧团-' + title + '.ics';
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+      };
+    }
+  <\/script>
+</body>
+</html>`;
+
+  const win = window.open('', '_blank');
+  if (win && win.document) {
+    win.document.open();
+    win.document.write(pageHtml);
+    win.document.close();
+  } else {
+    const blob = new Blob([pageHtml], { type: 'text/html;charset=utf-8' });
+    const blobUrl = URL.createObjectURL(blob);
+    window.location.href = blobUrl;
+  }
+}
+
+/* 绑定报名链接点击行为：外部有效网址直接原生跳转，小程序口令直接打开专属报名活动页面 */
+function attachRegistrationLinkNavigation(anchorEl, act) {
+  const raw = (act && act.link ? String(act.link).trim() : '') || '#小程序://粗门/IX7JsenQZCDoTot';
+  const directUrl = resolveDirectExternalUrl(raw);
+  anchorEl.href = directUrl || raw;
+  anchorEl.target = '_blank';
+  anchorEl.rel = 'noopener noreferrer';
+  anchorEl.onclick = e => {
+    const currentRaw = (act && act.link ? String(act.link).trim() : '') || '#小程序://粗门/IX7JsenQZCDoTot';
+    const currentDirectUrl = resolveDirectExternalUrl(currentRaw);
+    if (currentDirectUrl) {
+      // 标准有效网页链接（http/https/weixin/域名）直接更新 href 由浏览器原生跳转
+      anchorEl.href = currentDirectUrl;
+      return;
+    }
+    // #小程序://粗门/... 链接：阻止本页锚点跳动，直接打开该活动的报名活动页面
+    e.preventDefault();
+    openMiniProgramRegistrationPage(act);
+  };
+}
+
+/* ==================== 跨设备通用日历事件导出 (iCalendar .ics / 设备自带日历唤起与有效提醒) ==================== */
+function escapeIcsText(str) {
+  if (!str) return '';
+  return String(str)
+    .replace(/\\/g, '\\\\')
+    .replace(/;/g, '\\;')
+    .replace(/,/g, '\\,')
+    .replace(/\r?\n/g, '\\n');
+}
+
+function parseActivityStartEndDates(act) {
+  const rawDate = (act && act.date ? String(act.date).trim() : '') || '2026-11-22';
+  const rawTime = getActivityTime(act) || '14:00';
+  const dateParts = rawDate.split('-');
+  const y = parseInt(dateParts[0] || '2026', 10);
+  const m = parseInt(dateParts[1] || '1', 10);
+  const d = parseInt(dateParts[2] || '1', 10);
+
+  const timeMatch = rawTime.match(/(\d{1,2})[:：](\d{2})/);
+  const sh = timeMatch ? parseInt(timeMatch[1], 10) : 14;
+  const sm = timeMatch ? parseInt(timeMatch[2], 10) : 0;
+
+  let durationMins = 120;
+  if (act && act.showFlow && Array.isArray(act.flowRows) && act.flowRows.length > 0) {
+    const totalFlowMins = act.flowRows.reduce((sum, r) => sum + parseDurationToMins(r.duration), 0);
+    if (totalFlowMins > 0) durationMins = totalFlowMins;
+  }
+
+  const startDate = new Date(y, m - 1, d, sh, sm, 0);
+  const endDate = new Date(startDate.getTime() + durationMins * 60 * 1000);
+
+  return { startDate, endDate, durationMins, rawDate, rawTime };
+}
+
+function generateActivityIcs(act) {
+  const title = (act && act.title ? act.title.trim() : '') || '壹出好戏剧团活动';
+  const loc = (act && act.location ? act.location.trim() : '') || '上海·壹出好戏排演剧场';
+  const { startDate, endDate, rawDate, rawTime } = parseActivityStartEndDates(act);
+
+  const pad = n => String(n).padStart(2, '0');
+  const formatIcsDt = dt => `${dt.getFullYear()}${pad(dt.getMonth() + 1)}${pad(dt.getDate())}T${pad(dt.getHours())}${pad(dt.getMinutes())}00`;
+
+  const dtStart = formatIcsDt(startDate);
+  const dtEnd = formatIcsDt(endDate);
+
+  const eh = pad(endDate.getHours());
+  const em = pad(endDate.getMinutes());
+
+  let desc = `活动分类：${act && act.category === 'drama' ? '话剧演出' : (act && act.category === 'rehearsal' ? '日常排练' : '主题活动')}\n`;
+  desc += `活动时间：${rawDate} ${rawTime} - ${eh}:${em}\n`;
+  desc += `活动地点：${loc}\n`;
+  if (act && act.link) {
+    desc += `报名链接/通道：${act.link}\n`;
+  }
+  if (act && act.showFlow && Array.isArray(act.flowRows) && act.flowRows.length > 0) {
+    desc += `活动流程安排：\n`;
+    act.flowRows.forEach((r, i) => {
+      desc += `${i + 1}. [${r.startTime || ''}] (${r.duration || ''}) ${r.content || ''}\n`;
+    });
+  }
+  desc += `\n主办方：壹出好戏剧团\n温馨提醒：演出/排练前请准时签到入场。`;
+
+  const now = new Date();
+  const dtStamp = `${now.getUTCFullYear()}${pad(now.getUTCMonth() + 1)}${pad(now.getUTCDate())}T${pad(now.getUTCHours())}${pad(now.getUTCMinutes())}${pad(now.getUTCSeconds())}Z`;
+  const uid = `yichuhaoxi-${(act && act.id) || Date.now()}-${startDate.getTime()}@yichuhaoxi.drama`;
+
+  return [
+    'BEGIN:VCALENDAR',
+    'VERSION:2.0',
+    'PRODID:-//YI CHU HAO XI//Drama Calendar//CN',
+    'CALSCALE:GREGORIAN',
+    'METHOD:PUBLISH',
+    'BEGIN:VEVENT',
+    `UID:${uid}`,
+    `DTSTAMP:${dtStamp}`,
+    `DTSTART:${dtStart}`,
+    `DTEND:${dtEnd}`,
+    `SUMMARY:🎭 壹出好戏剧团 · ${escapeIcsText(title)}`,
+    `LOCATION:${escapeIcsText(loc)}`,
+    `DESCRIPTION:${escapeIcsText(desc)}`,
+    'STATUS:CONFIRMED',
+    'TRANSP:OPAQUE',
+    // 3级有效强提醒（符合 RFC 5545 标准规范）
+    // 1. 活动提前15分钟强提醒（入场提醒）
+    'BEGIN:VALARM',
+    'ACTION:DISPLAY',
+    `DESCRIPTION:🎭 剧团活动即将于15分钟后开始：${escapeIcsText(title)}`,
+    'TRIGGER:-PT15M',
+    'END:VALARM',
+    // 2. 活动提前2小时强提醒（出发准备提醒）
+    'BEGIN:VALARM',
+    'ACTION:DISPLAY',
+    `DESCRIPTION:🎭 距离壹出好戏活动开始还有2小时：${escapeIcsText(title)}（地点：${escapeIcsText(loc)}）`,
+    'TRIGGER:-PT2H',
+    'END:VALARM',
+    // 3. 活动提前1天强提醒（日程规划与排练预告）
+    'BEGIN:VALARM',
+    'ACTION:DISPLAY',
+    `DESCRIPTION:🎭 明日剧团活动提醒：${escapeIcsText(title)}（时间：${rawTime}）`,
+    'TRIGGER:-P1D',
+    'END:VALARM',
+    'END:VEVENT',
+    'END:VCALENDAR'
+  ].join('\r\n');
+}
+
+/* ==================== 优雅的日历唤起与提醒确认卡片 Toast ==================== */
+/* ==================== 跨平台日历直达助手与多通道唤起引擎 ==================== */
+function formatGoogleCalendarDate(dt) {
+  const pad = n => String(n).padStart(2, '0');
+  return `${dt.getUTCFullYear()}${pad(dt.getUTCMonth() + 1)}${pad(dt.getUTCDate())}T${pad(dt.getUTCHours())}${pad(dt.getUTCMinutes())}${pad(dt.getUTCSeconds())}Z`;
+}
+
+function showCalendarPromptToast(act, icsData, onDownloadFallback) {
+  let mask = document.getElementById('cal-modal-toast-mask');
+  if (!mask) {
+    mask = document.createElement('div');
+    mask.id = 'cal-modal-toast-mask';
+    mask.className = 'cal-toast-mask';
+    document.body.appendChild(mask);
+  }
+
+  const title = (act && act.title ? act.title.trim() : '') || '壹出好戏剧团活动';
+  const loc = (act && act.location ? act.location.trim() : '') || '上海·壹出好戏排演剧场';
+  const { startDate, endDate, rawDate, rawTime } = parseActivityStartEndDates(act);
+  const pad = n => String(n).padStart(2, '0');
+  const endTimeStr = `${pad(endDate.getHours())}:${pad(endDate.getMinutes())}`;
+
+  const ua = navigator.userAgent || '';
+  const isWeChat = /MicroMessenger/i.test(ua);
+  const isIOS = /iPad|iPhone|iPod/.test(ua) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+  const isAndroid = /Android/i.test(ua);
+
+  // 1. iOS 系统级日历 Scheme 直达协议 (打开自带日历并定位到指定日期)
+  const iosCalShowUrl = `calshow:${Math.floor(startDate.getTime() / 1000)}`;
+
+  // 2. Android 原生系统日历 Intent 直达协议 (直接呼出新建日程并设置提醒)
+  const startMs = startDate.getTime();
+  const endMs = endDate.getTime();
+  let plainDesc = `【壹出好戏剧团】${title}\n时间：${rawDate} ${rawTime} - ${endTimeStr}\n地点：${loc}`;
+  if (act && act.link) plainDesc += `\n报名通道：${act.link}`;
+  const androidIntentUrl = `intent:#Intent;action=android.intent.action.INSERT;type=vnd.android.cursor.dir/event;S.title=${encodeURIComponent('🎭 壹出好戏剧团 · ' + title)};S.eventLocation=${encodeURIComponent(loc)};S.description=${encodeURIComponent(plainDesc)};l.beginTime=${startMs};l.endTime=${endMs};i.hasAlarm=1;end`;
+  const androidCalTimeUrl = `content://com.android.calendar/time/${startMs}`;
+
+  // 3. 通用 Google Calendar 云日历添加直达链接
+  const googleCalUrl = `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${encodeURIComponent('🎭 壹出好戏剧团 · ' + title)}&dates=${formatGoogleCalendarDate(startDate)}/${formatGoogleCalendarDate(endDate)}&details=${encodeURIComponent(plainDesc)}&location=${encodeURIComponent(loc)}`;
+
+  let platformTip = '';
+  let primaryBtnHtml = '';
+
+  if (isWeChat) {
+    platformTip = '⚠️ <strong>微信内置浏览器限制直接唤起系统日历</strong>：请点击微信右上角<strong>【···】</strong>选择<strong>【在 Safari / 默认浏览器中打开】</strong>，即可直接唤起手机自带日历并设置 3 重有效强提醒！';
+    primaryBtnHtml = `
+      <a href="${googleCalUrl}" target="_blank" rel="noopener" class="cal-toast-btn-primary">
+        <span>🌐 在网页/Google日历中添加</span>
+      </a>
+    `;
+  } else if (isIOS) {
+    platformTip = '已为您准备好日程与 3 级强提醒！点击下方<strong>「📥 导入日程至系统日历」</strong>，Safari 将直接弹出日历添加卡片；或点击<strong>「📱 打开 iPhone 自带日历」</strong>直接进入日历应用。';
+    primaryBtnHtml = `
+      <div class="cal-toast-btn-row">
+        <button type="button" class="cal-toast-btn-primary" id="cal-toast-import-btn">
+          <span>📥 导入日程并开启强提醒</span>
+        </button>
+        <a href="${iosCalShowUrl}" class="cal-toast-btn-app" id="cal-toast-app-btn">
+          <span>📱 打开自带日历</span>
+        </a>
+      </div>
+    `;
+  } else if (isAndroid) {
+    platformTip = '正在唤起安卓手机自带日历！如未自动弹出，请点击下方<strong>「📲 打开安卓自带日历」</strong>直接新建日程，或选择<strong>「📥 导入日历文件」</strong>。';
+    primaryBtnHtml = `
+      <div class="cal-toast-btn-row">
+        <a href="${androidIntentUrl}" class="cal-toast-btn-app" id="cal-toast-app-btn">
+          <span>📲 打开安卓自带日历</span>
+        </a>
+        <button type="button" class="cal-toast-btn-primary" id="cal-toast-import-btn">
+          <span>📥 导入日历文件 (.ics)</span>
+        </button>
+      </div>
+    `;
+  } else {
+    platformTip = '已为您生成包含 3 级强提醒的日历文件！点击下方按钮直接打开，Mac 将唤起<strong>「日历.app」</strong>，Windows 将唤起<strong>「日历/Outlook」</strong>。';
+    primaryBtnHtml = `
+      <div class="cal-toast-btn-row">
+        <button type="button" class="cal-toast-btn-primary" id="cal-toast-import-btn">
+          <span>📅 打开/保存至系统日历 (.ics)</span>
+        </button>
+        <a href="${googleCalUrl}" target="_blank" rel="noopener" class="cal-toast-btn-secondary" style="flex:0.7;">
+          <span>🌐 Google 日历</span>
+        </a>
+      </div>
+    `;
+  }
+
+  mask.innerHTML = `
+    <div class="cal-toast-card" onclick="event.stopPropagation()">
+      <button type="button" class="cal-toast-close" id="cal-toast-close-btn" aria-label="关闭">&times;</button>
+      <div class="cal-toast-header">
+        <div class="cal-toast-icon">📅</div>
+        <div class="cal-toast-title-box">
+          <h4>添加至设备自带日历</h4>
+          <p>支持 iPhone / 安卓 / Mac / PC 自带日历多通道直达</p>
+        </div>
+      </div>
+      <div class="cal-toast-body">
+        <div class="cal-toast-detail-row">
+          <span class="cal-toast-detail-label">活动项目</span>
+          <span class="cal-toast-detail-val">🎭 ${title}</span>
+        </div>
+        <div class="cal-toast-detail-row">
+          <span class="cal-toast-detail-label">活动时间</span>
+          <span class="cal-toast-detail-val">${rawDate} ${rawTime} - ${endTimeStr}</span>
+        </div>
+        <div class="cal-toast-detail-row">
+          <span class="cal-toast-detail-label">活动地点</span>
+          <span class="cal-toast-detail-val">${loc}</span>
+        </div>
+        <div class="cal-toast-alarms">
+          <div style="font-size:12px;color:#64748b;margin-bottom:2px;">🔔 已内置 3 级有效强提醒（系统闹钟/弹窗）：</div>
+          <div><span class="cal-toast-alarm-tag">⏰ 提前 1 天（日程规划提醒）</span></div>
+          <div><span class="cal-toast-alarm-tag">⏰ 提前 2 小时（出行与交通提醒）</span></div>
+          <div><span class="cal-toast-alarm-tag">⏰ 提前 15 分钟（检票入场强提醒）</span></div>
+        </div>
+      </div>
+      <div class="cal-toast-guide">
+        ${platformTip}
+      </div>
+      <div class="cal-toast-actions">
+        ${primaryBtnHtml}
+        <div class="cal-toast-btn-row">
+          <button type="button" class="cal-toast-btn-secondary" id="cal-toast-copy-btn">
+            <span>📋 复制日程内容</span>
+          </button>
+          <a href="${googleCalUrl}" target="_blank" rel="noopener" class="cal-toast-btn-secondary">
+            <span>🌐 Google 日历</span>
+          </a>
+        </div>
+      </div>
+    </div>
+  `;
+
+  mask.classList.add('show');
+
+  const closeToast = () => {
+    mask.classList.remove('show');
+  };
+
+  mask.onclick = closeToast;
+  const closeBtn = document.getElementById('cal-toast-close-btn');
+  if (closeBtn) closeBtn.onclick = closeToast;
+
+  const importBtn = document.getElementById('cal-toast-import-btn');
+  if (importBtn) {
+    importBtn.onclick = () => {
+      triggerIcsDownload(act, icsData);
+    };
+  }
+
+  const copyBtn = document.getElementById('cal-toast-copy-btn');
+  if (copyBtn) {
+    copyBtn.onclick = () => {
+      const copyText = `🎭【壹出好戏剧团活动日程】\n活动：${title}\n时间：${rawDate} ${rawTime} - ${endTimeStr}\n地点：${loc}${act.link ? '\n链接：' + act.link : ''}\n（提醒：已设活动前1天、前2小时、前15分钟提醒）`;
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(copyText).then(() => {
+          copyBtn.innerHTML = '<span>✅ 已复制日程！</span>';
+          setTimeout(() => { copyBtn.innerHTML = '<span>📋 复制日程内容</span>'; }, 2000);
+        }).catch(() => fallbackCopy(copyText, copyBtn));
+      } else {
+        fallbackCopy(copyText, copyBtn);
+      }
+    };
+  }
+
+  function fallbackCopy(text, btn) {
+    const ta = document.createElement('textarea');
+    ta.value = text;
+    document.body.appendChild(ta);
+    ta.select();
+    try {
+      document.execCommand('copy');
+      btn.innerHTML = '<span>✅ 已复制日程！</span>';
+      setTimeout(() => { btn.innerHTML = '<span>📋 复制日程内容</span>'; }, 2000);
+    } catch (e) {
+      alert('日程内容：\n' + text);
+    }
+    document.body.removeChild(ta);
+  }
+}
+
+/* 核心执行函数：按设备平台多通道自动触发唤起 */
+function triggerPlatformCalendarOpen(act, icsData, isRetry) {
+  const ua = navigator.userAgent || '';
+  const isWeChat = /MicroMessenger/i.test(ua);
+  const isIOS = /iPad|iPhone|iPod/.test(ua) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+  const isAndroid = /Android/i.test(ua);
+
+  const title = (act && act.title ? act.title.trim() : '') || '壹出好戏剧团活动';
+  const loc = (act && act.location ? act.location.trim() : '') || '上海·壹出好戏排演剧场';
+  const { startDate, endDate, rawDate, rawTime } = parseActivityStartEndDates(act);
+  const pad = n => String(n).padStart(2, '0');
+  const endTimeStr = `${pad(endDate.getHours())}:${pad(endDate.getMinutes())}`;
+
+  // 1. Android 设备：直接通过 Intent 唤起系统日历“新建日程”界面
+  if (isAndroid && !isWeChat) {
+    const startMs = startDate.getTime();
+    const endMs = endDate.getTime();
+    let plainDesc = `【壹出好戏剧团】${title}\n时间：${rawDate} ${rawTime} - ${endTimeStr}\n地点：${loc}`;
+    if (act && act.link) plainDesc += `\n报名通道：${act.link}`;
+
+    const androidIntent = `intent:#Intent;action=android.intent.action.INSERT;type=vnd.android.cursor.dir/event;S.title=${encodeURIComponent('🎭 壹出好戏剧团 · ' + title)};S.eventLocation=${encodeURIComponent(loc)};S.description=${encodeURIComponent(plainDesc)};l.beginTime=${startMs};l.endTime=${endMs};i.hasAlarm=1;end`;
+
+    try {
+      window.location.href = androidIntent;
+    } catch (e) {
+      console.warn('Android intent jump caught:', e);
+    }
+    return;
+  }
+
+  // 2. iOS / iPhone / iPad 设备 (Safari / 系统原生 WebKit)
+  if (isIOS && !isWeChat) {
+    // 优先触发系统原生日历文件下载（iOS Safari 下载后点击直接弹出“在日历中打开并添加”面板）
+    triggerIcsDownload(act, icsData);
+    return;
+  }
+
+  // 3. 桌面端 (Mac 自动唤起“日历.app”，Windows 唤起“日历/Outlook”)
+  triggerIcsDownload(act, icsData);
+}
+
+function triggerIcsDownload(act, icsData) {
+  const blob = new Blob([icsData], { type: 'text/calendar;charset=utf-8' });
+  const fileName = `壹出好戏剧团-${(act && act.title) || '活动'}-${(act && act.date) || '日程'}.ics`;
+  const link = document.createElement('a');
+  link.href = window.URL.createObjectURL(blob);
+  link.setAttribute('download', fileName);
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+  setTimeout(() => window.URL.revokeObjectURL(link.href), 5000);
+}
+
+function addActivityToCalendar(act, triggerBtn) {
+  if (!act) return;
+
+  // 1. 按钮视觉即时反馈
+  let originalHtml = '';
+  if (triggerBtn && triggerBtn.innerHTML) {
+    originalHtml = triggerBtn.innerHTML;
+    triggerBtn.innerHTML = '<span>⏳ 正在调起日历...</span>';
+    setTimeout(() => {
+      triggerBtn.innerHTML = '<span>✓ 已调起系统日历</span>';
+      setTimeout(() => {
+        triggerBtn.innerHTML = originalHtml;
+      }, 2500);
+    }, 600);
+  }
+
+  // 2. 生成包含 3 级高有效性 VALARM 强提醒的 ICS 数据
+  const icsData = generateActivityIcs(act);
+
+  // 3. 直接跳转设备自带系统日历
+  triggerPlatformCalendarOpen(act, icsData, false);
+
+  // 4. 弹出精美操作引导提示卡片，确保用户知道在系统日历中点击“添加/保存”完成有效提醒
+  showCalendarPromptToast(act, icsData, () => {
+    triggerIcsDownload(act, icsData);
+  });
+}
+
 /* ==================== 准确识别粗门小程序分享内容中的报名链接 ==================== */
 function extractCumenLink(rawText) {
   const s = String(rawText || '').trim();
   if (!s) return '';
 
+  // 1. 优先提取明确的 URL 格式（http://, https://, weixin://），保留完整的 query 参数（包含 ?、=、& 等）
+  const urlRegex = /(?:https?:\/\/|weixin:\/\/)[^\s\n\r，。；！？"\'<>（）()【】\[\]]+/i;
+  const urlMatch = s.match(urlRegex);
+  if (urlMatch) {
+    let clean = urlMatch[0].trim();
+    // 仅剔除结尾可能误带的中英文句末标点
+    clean = clean.replace(/[，。；！？,.!?"'<>）)\]]+$/, '');
+    return clean;
+  }
+
+  // 2. 提取微信小程序口令格式（如 #小程序://粗门/...）
   const mpRegex = /#?小程序:\/\/[^\s\n\r，。；！？,.;!?"'<>（）()【】\[\]]+(?:\s+[A-Za-z0-9]{1,6}(?=\s|$|[\n\r，。；！？,.;!?"'<>（）()【】\[\]]))?/;
   const mpMatch = s.match(mpRegex);
   if (mpMatch) {
@@ -1729,28 +3292,28 @@ function extractCumenLink(rawText) {
     return cleaned;
   }
 
-  const urlRegex = /(?:https?:\/\/|weixin:\/\/)[^\s\n\r，。；！？,.;!?"'<>（）()【】\[\]]+/i;
-  const urlMatch = s.match(urlRegex);
-  if (urlMatch) {
-    return urlMatch[0].trim();
-  }
-
+  // 3. 从标签字段中提取（如 报名链接：...）
   const labelRegex = /(?:报名链接|小程序链接|粗门链接|报名口令|小程序口令|报名通道|点击报名|报名地址|链接)\s*[:：]\s*([^\n\r]+)/i;
   const labelMatch = s.match(labelRegex);
   if (labelMatch && labelMatch[1].trim()) {
     const candidate = labelMatch[1].trim();
+    const innerUrl = candidate.match(urlRegex);
+    if (innerUrl) {
+      let clean = innerUrl[0].trim();
+      clean = clean.replace(/[，。；！？,.!?"'<>）)\]]+$/, '');
+      return clean;
+    }
     const innerMp = candidate.match(mpRegex);
     if (innerMp) {
       let cleaned = innerMp[0].replace(/\s+/g, '');
       if (!cleaned.startsWith('#')) cleaned = '#' + cleaned;
       return cleaned;
     }
-    const innerUrl = candidate.match(urlRegex);
-    if (innerUrl) return innerUrl[0].trim();
     return candidate;
   }
 
-  if (!s.includes('\n') && (s.includes('粗门') || s.includes('小程序') || s.startsWith('#') || s.startsWith('http'))) {
+  // 4. 单行输入且为链接特征字符串
+  if (!s.includes('\n') && (s.includes('粗门') || s.includes('小程序') || s.startsWith('#') || s.startsWith('http') || s.startsWith('weixin://') || /^[a-zA-Z0-9][-a-zA-Z0-9]*\.[a-zA-Z]{2,}/.test(s))) {
     return s.replace(/\s+/g, '');
   }
 
@@ -1814,7 +3377,9 @@ function parseCumenShareDetails(rawText) {
   }
 
   let category = null;
-  if (/恋爱|恋综|心动|综艺|派对|舞会|交友|沙龙/.test((titleStr || '') + text)) {
+  if (/排练|日常排练|剧组排练|联排|对词|彩排|坐排/.test((titleStr || '') + text)) {
+    category = 'rehearsal';
+  } else if (/恋爱|恋综|心动|综艺|派对|舞会|交友|沙龙/.test((titleStr || '') + text)) {
     category = 'theme';
   } else if (/话剧|演读|演出|无人生还|剧本|排演|展演/.test((titleStr || '') + text)) {
     category = 'drama';
@@ -1832,24 +3397,27 @@ function parseCumenShareDetails(rawText) {
 
 function loadState() {
   let st = clone(defaultData);
-  try {
-    const savedRaw =
-      localStorage.getItem(STORAGE_KEY) ||
-      localStorage.getItem('yichuhaoxi-simplified-activities-v8') ||
-      localStorage.getItem('yichuhaoxi-simplified-activities-v7') ||
-      localStorage.getItem('yichuhaoxi-simplified-activities-v6') ||
-      localStorage.getItem('yichuhaoxi-simplified-activities-v5') ||
-      localStorage.getItem('yichuhaoxi-simplified-activities-v4') ||
-      localStorage.getItem('yichuhaoxi-simplified-activities-v3');
-    if (savedRaw) {
-      const parsed = JSON.parse(savedRaw);
-      if (parsed && Array.isArray(parsed.activities)) {
-        if (!st.savedAt || (parsed.savedAt && parsed.savedAt >= st.savedAt)) {
-          st = parsed;
+  /* 导出后的只读文件直接加载导出时内置的数据快照，不读取本地缓存 */
+  if (!IS_READONLY) {
+    try {
+      const savedRaw =
+        localStorage.getItem(STORAGE_KEY) ||
+        localStorage.getItem('yichuhaoxi-simplified-activities-v8') ||
+        localStorage.getItem('yichuhaoxi-simplified-activities-v7') ||
+        localStorage.getItem('yichuhaoxi-simplified-activities-v6') ||
+        localStorage.getItem('yichuhaoxi-simplified-activities-v5') ||
+        localStorage.getItem('yichuhaoxi-simplified-activities-v4') ||
+        localStorage.getItem('yichuhaoxi-simplified-activities-v3');
+      if (savedRaw) {
+        const parsed = JSON.parse(savedRaw);
+        if (parsed && Array.isArray(parsed.activities)) {
+          if (!st.savedAt || (parsed.savedAt && parsed.savedAt >= st.savedAt)) {
+            st = parsed;
+          }
         }
       }
-    }
-  } catch (e) {}
+    } catch (e) {}
+  }
   st.holidays = Object.assign({}, defaultData.holidays, st.holidays || {});
   st.workdays = Object.assign({}, defaultData.workdays, st.workdays || {});
   st.customDayStatus = st.customDayStatus || {};
@@ -1864,13 +3432,34 @@ function loadState() {
 }
 
 let state = loadState();
-let isEditMode = true;
+let isEditMode = !IS_READONLY;
 let activePeriod = periods[state.activePeriod] ? state.activePeriod : '2026';
-let activeMonth = state.activeMonth || 'ALL'; // 'ALL' 或月份数字字符串 '0'..'11'
+let activeMonth = state.activeMonth || 'ALL';
 let selectedDate = state.selectedDate || '2026-11-22';
 let categoryFilter = '';
 let titleFilter = '';
 let undoStack = [];
+
+/* 若为导出后的只读预览文件，强制初始化为不可编辑状态 */
+function enforceModeState() {
+  if (IS_READONLY) {
+    isEditMode = false;
+    document.body.classList.remove('edit-mode');
+    document.body.classList.add('readonly-export');
+  } else {
+    document.body.classList.toggle('edit-mode', isEditMode);
+  }
+  uiTextIds.forEach(id => {
+    const el = byId(id);
+    if (el) el.contentEditable = String(isEditMode && !IS_READONLY);
+  });
+  const hintEl = byId('right-panel-hint');
+  if (hintEl) {
+    hintEl.textContent = (isEditMode && !IS_READONLY)
+      ? '每个活动独立一个小框；支持设备自带地图导航、直接计算「开始时间 + 时长」、一键移除流程表及实时保存。'
+      : '点击左侧日历日期可查看当日活动详情；直接点击「报名链接」即可跳转到报名活动页面，支持一键唤起地图导航。';
+  }
+}
 
 /* 确保当前选中的月份与日期不在已过去的隐藏月份中 */
 function normalizePeriodMonthAndDate() {
@@ -1912,6 +3501,7 @@ function applyUiText() {
 }
 
 function captureUiText() {
+  if (IS_READONLY) return;
   state.uiText = state.uiText || {};
   uiTextIds.forEach(id => {
     const el = byId(id);
@@ -1920,6 +3510,7 @@ function captureUiText() {
 }
 
 function updateSaveIndicator(manual = false) {
+  if (IS_READONLY) return;
   const pill = byId('save-status-pill');
   if (!pill) return;
   const now = new Date();
@@ -1932,6 +3523,7 @@ function updateSaveIndicator(manual = false) {
 }
 
 function persistState(manual = false) {
+  if (IS_READONLY) return;
   captureUiText();
   state.savedAt = Date.now();
   state.activePeriod = activePeriod;
@@ -1953,7 +3545,6 @@ function renderMonthFilterButtons() {
 
   const visibleMonths = getVisibleMonthsForPeriod(activePeriod);
 
-  // 「全部月份」按钮
   const allBtn = document.createElement('button');
   allBtn.type = 'button';
   allBtn.className = 'month-opt-btn' + (activeMonth === 'ALL' ? ' active' : '');
@@ -1967,7 +3558,6 @@ function renderMonthFilterButtons() {
   };
   container.appendChild(allBtn);
 
-  // 各个未过去月份的可选按钮
   visibleMonths.forEach(([year, monthIdx]) => {
     const monthPrefix = `${year}-${String(monthIdx + 1).padStart(2, '0')}`;
     const hasActs = state.activities.some(a => a.date && a.date.startsWith(monthPrefix));
@@ -2020,7 +3610,7 @@ function getDayHolidayStatus(dateStr) {
   return null;
 }
 
-/* ==================== 时间与公式计算引擎（支持“开始时间+时长”及 =A1+B1 等公式） ==================== */
+/* ==================== 时间与公式计算引擎 ==================== */
 function parseTimeToMins(str) {
   if (!str) return null;
   const m = String(str).trim().match(/^(\d{1,2})[:：](\d{1,2})$/);
@@ -2188,14 +3778,14 @@ function getActivitiesForDate(dateStr, applyFilter = true) {
 
 /* ==================== 移除某个活动的流程表 ==================== */
 function removeActivityFlowTable(act) {
-  if (!act) return;
+  if (!isEditMode || IS_READONLY || !act) return;
   undoStack.push({
     type: 'restore-flow',
     actId: act.id,
     prevRows: clone(act.flowRows || []),
     prevShowFlow: act.showFlow
   });
-  byId('undo-cancel-btn').hidden = false;
+  if (byId('undo-cancel-btn')) byId('undo-cancel-btn').hidden = false;
 
   act.showFlow = false;
   act.flowRows = [];
@@ -2213,7 +3803,7 @@ function renderOverviewTable() {
 
   if (!list.length) {
     const tr = document.createElement('tr');
-    tr.innerHTML = `<td colspan="6" style="text-align:center;color:var(--muted);padding:18px;">暂无匹配的活动，可点击右上角「+ 添加活动」创建</td>`;
+    tr.innerHTML = `<td colspan="6" style="text-align:center;color:var(--muted);padding:18px;">暂无匹配的活动</td>`;
     tbody.appendChild(tr);
     return;
   }
@@ -2231,7 +3821,8 @@ function renderOverviewTable() {
     tdDate.innerHTML = `<span class="overview-datetime-pill">${formattedDT}</span>${hBadge}`;
 
     const tdCat = document.createElement('td');
-    tdCat.innerHTML = `<span class="cat-tag ${act.category}">${act.category === 'drama' ? '🎭 话剧演出' : '✨ 主题活动'}</span>`;
+    const catName = act.category === 'drama' ? '🎭 话剧演出' : (act.category === 'rehearsal' ? '🎬 日常排练' : '✨ 主题活动');
+    tdCat.innerHTML = `<span class="cat-tag ${act.category}">${catName}</span>`;
 
     const tdTitle = document.createElement('td');
     tdTitle.className = 'overview-title-cell';
@@ -2249,11 +3840,15 @@ function renderOverviewTable() {
     mapAnchor.textContent = `🧭 ${act.location || '待定'} ↗`;
     tdLoc.appendChild(mapAnchor);
 
+    // 报名链接列：渲染为可直接点击跳转的有效超链接
     const tdLink = document.createElement('td');
-    tdLink.style.fontFamily = 'ui-monospace, monospace';
-    tdLink.style.fontSize = '12px';
-    tdLink.style.color = '#1d4ed8';
-    tdLink.textContent = act.link || '#小程序://粗门/IX7JsenQZCDoTot';
+    const regAnchor = document.createElement('a');
+    regAnchor.className = 'overview-reg-link';
+    const linkText = act.link || '#小程序://粗门/IX7JsenQZCDoTot';
+    regAnchor.textContent = `🔗 ${linkText} ↗`;
+    regAnchor.title = '点击直接跳转到报名活动页面';
+    attachRegistrationLinkNavigation(regAnchor, act);
+    tdLink.appendChild(regAnchor);
 
     const tdOps = document.createElement('td');
     tdOps.className = 'edit-only';
@@ -2272,7 +3867,18 @@ function renderOverviewTable() {
     cancelBtn.textContent = '× 取消活动';
     cancelBtn.onclick = () => cancelActivityById(act.id);
 
-    tdOps.append(viewBtn, cancelBtn);
+    const calBtn = document.createElement('button');
+    calBtn.type = 'button';
+    calBtn.className = 'btn sm';
+    calBtn.style.marginRight = '6px';
+    calBtn.innerHTML = '📅 添加至日历';
+    calBtn.title = '添加到系统日历提醒';
+    calBtn.onclick = (e) => {
+      e.stopPropagation();
+      addActivityToCalendar(act, calBtn);
+    };
+
+    tdOps.append(calBtn, viewBtn, cancelBtn);
     tr.append(tdDate, tdCat, tdTitle, tdLoc, tdLink, tdOps);
     tbody.appendChild(tr);
   });
@@ -2295,7 +3901,7 @@ function selectDateAndJump(dateStr) {
   renderAll();
 }
 
-/* ==================== 渲染左侧日历（隐藏已过去月份 + 支持按选中月份过滤） ==================== */
+/* ==================== 渲染左侧日历 ==================== */
 function renderCalendar() {
   const visibleMonths = getVisibleMonthsForPeriod(activePeriod);
   const monthsToRender = activeMonth === 'ALL'
@@ -2358,12 +3964,21 @@ function renderCalendar() {
 
       const hasDrama = dayActs.some(a => a.category === 'drama');
       const hasTheme = dayActs.some(a => a.category === 'theme');
-      if (hasDrama && hasTheme) {
-        btn.classList.add('has-both');
+      const hasRehearsal = dayActs.some(a => a.category === 'rehearsal');
+      const catCount = (hasDrama ? 1 : 0) + (hasTheme ? 1 : 0) + (hasRehearsal ? 1 : 0);
+
+      if (catCount >= 2) {
+        if (hasDrama && hasTheme && !hasRehearsal) {
+          btn.classList.add('has-both');
+        } else {
+          btn.classList.add('has-multi');
+        }
       } else if (hasDrama) {
         btn.classList.add('has-drama');
       } else if (hasTheme) {
         btn.classList.add('has-theme');
+      } else if (hasRehearsal) {
+        btn.classList.add('has-rehearsal');
       }
 
       if (dStr === selectedDate) {
@@ -2376,12 +3991,15 @@ function renderCalendar() {
 
       const tips = [dStr];
       if (hStatus) tips.push(`[${hStatus.type === 'holiday' ? '假期' : '补班'}] ${hStatus.name}`);
-      dayActs.forEach(a => tips.push(`[${a.category === 'drama' ? '话剧演出' : '主题活动'}] ${a.title} ${getActivityTime(a)}（${a.location}）`));
+      dayActs.forEach(a => {
+        const cName = a.category === 'drama' ? '话剧演出' : (a.category === 'rehearsal' ? '日常排练' : '主题活动');
+        tips.push(`[${cName}] ${a.title} ${getActivityTime(a)}（${a.location}）`);
+      });
       btn.title = tips.join(' | ');
 
       btn.onclick = () => {
         selectedDate = dStr;
-        byId('form-act-date').value = selectedDate;
+        if (byId('form-act-date')) byId('form-act-date').value = selectedDate;
         persistState();
         renderCalendar();
         renderRightPanel();
@@ -2395,50 +4013,73 @@ function renderCalendar() {
   });
 
   const selLabelEl = byId('selected-date-label');
-  selLabelEl.textContent = fmtDate(selectedDate, { year: 'numeric', month: 'long', day: 'numeric', weekday: 'short' });
-  selLabelEl.classList.remove('has-drama', 'has-theme', 'has-both');
-  const selDayActs = getActivitiesForDate(selectedDate, true);
-  const selHasDrama = selDayActs.some(a => a.category === 'drama');
-  const selHasTheme = selDayActs.some(a => a.category === 'theme');
-  if (selHasDrama && selHasTheme) {
-    selLabelEl.classList.add('has-both');
-  } else if (selHasDrama) {
-    selLabelEl.classList.add('has-drama');
-  } else if (selHasTheme) {
-    selLabelEl.classList.add('has-theme');
+  if (selLabelEl) {
+    selLabelEl.textContent = fmtDate(selectedDate, { year: 'numeric', month: 'long', day: 'numeric', weekday: 'short' });
+    selLabelEl.classList.remove('has-drama', 'has-theme', 'has-rehearsal', 'has-both', 'has-multi');
+    const selDayActs = getActivitiesForDate(selectedDate, true);
+    const selHasDrama = selDayActs.some(a => a.category === 'drama');
+    const selHasTheme = selDayActs.some(a => a.category === 'theme');
+    const selHasRehearsal = selDayActs.some(a => a.category === 'rehearsal');
+    const selCatCount = (selHasDrama ? 1 : 0) + (selHasTheme ? 1 : 0) + (selHasRehearsal ? 1 : 0);
+    if (selCatCount >= 2) {
+      if (selHasDrama && selHasTheme && !selHasRehearsal) {
+        selLabelEl.classList.add('has-both');
+      } else {
+        selLabelEl.classList.add('has-multi');
+      }
+    } else if (selHasDrama) {
+      selLabelEl.classList.add('has-drama');
+    } else if (selHasTheme) {
+      selLabelEl.classList.add('has-theme');
+    } else if (selHasRehearsal) {
+      selLabelEl.classList.add('has-rehearsal');
+    }
   }
 
-  byId('day-status-select').value = (state.customDayStatus && state.customDayStatus[selectedDate]) || 'auto';
+  if (byId('day-status-select')) {
+    byId('day-status-select').value = (state.customDayStatus && state.customDayStatus[selectedDate]) || 'auto';
+  }
 
   const dayAllActs = getActivitiesForDate(selectedDate, false);
   const cancelAllBtn = byId('cal-cancel-all-btn');
-  if (dayAllActs.length > 0) {
-    cancelAllBtn.hidden = false;
-    cancelAllBtn.textContent = `× 取消 ${selectedDate} 的全部活动 (${dayAllActs.length}场)`;
-  } else {
-    cancelAllBtn.hidden = true;
+  if (cancelAllBtn) {
+    if (dayAllActs.length > 0) {
+      cancelAllBtn.hidden = false;
+      cancelAllBtn.textContent = `× 取消 ${selectedDate} 的全部活动 (${dayAllActs.length}场)`;
+    } else {
+      cancelAllBtn.hidden = true;
+    }
   }
 }
 
 /* ==================== 渲染右侧：当日活动信息与流程表 ==================== */
 function renderRightPanel() {
+  const canEdit = isEditMode && !IS_READONLY;
   const datePickerEl = byId('date-picker');
   datePickerEl.value = selectedDate;
 
   const dayActivities = getActivitiesForDate(selectedDate, true);
   const hasDrama = dayActivities.some(a => a.category === 'drama');
   const hasTheme = dayActivities.some(a => a.category === 'theme');
+  const hasRehearsal = dayActivities.some(a => a.category === 'rehearsal');
+  const catCount = (hasDrama ? 1 : 0) + (hasTheme ? 1 : 0) + (hasRehearsal ? 1 : 0);
 
   const bannerEl = byId('day-banner');
   [bannerEl, datePickerEl].forEach(el => {
     if (!el) return;
-    el.classList.remove('has-drama', 'has-theme', 'has-both');
-    if (hasDrama && hasTheme) {
-      el.classList.add('has-both');
+    el.classList.remove('has-drama', 'has-theme', 'has-rehearsal', 'has-both', 'has-multi');
+    if (catCount >= 2) {
+      if (hasDrama && hasTheme && !hasRehearsal) {
+        el.classList.add('has-both');
+      } else {
+        el.classList.add('has-multi');
+      }
     } else if (hasDrama) {
       el.classList.add('has-drama');
     } else if (hasTheme) {
       el.classList.add('has-theme');
+    } else if (hasRehearsal) {
+      el.classList.add('has-rehearsal');
     }
   });
 
@@ -2464,14 +4105,22 @@ function renderRightPanel() {
   if (dayActivities.length === 0) {
     const emptyBox = document.createElement('div');
     emptyBox.className = 'empty-day-box';
-    emptyBox.innerHTML = `
-      <p style="font-size:15px;font-weight:750;color:var(--ink);margin-bottom:6px;">${selectedDate} 暂无活动</p>
-      <p style="font-size:12.5px;margin-bottom:14px;">您可以点击下方按钮在当日添加「话剧演出」或「主题活动」，也可从上方「近期活动一览表」点击已有活动跳转。</p>
-      <button type="button" class="btn primary sm" id="empty-add-btn">+ 在 ${selectedDate} 添加活动</button>
-    `;
-    container.appendChild(emptyBox);
-    const btn = byId('empty-add-btn');
-    if (btn) btn.onclick = () => openAddActivityDrawer(selectedDate);
+    if (canEdit) {
+      emptyBox.innerHTML = `
+        <p style="font-size:15px;font-weight:750;color:var(--ink);margin-bottom:6px;">${selectedDate} 暂无活动</p>
+        <p style="font-size:12.5px;margin-bottom:14px;">您可以点击下方按钮在当日添加「话剧演出」或「主题活动」，也可从上方「近期活动一览表」点击已有活动跳转。</p>
+        <button type="button" class="btn primary sm edit-only" id="empty-add-btn">+ 在 ${selectedDate} 添加活动</button>
+      `;
+      container.appendChild(emptyBox);
+      const btn = byId('empty-add-btn');
+      if (btn) btn.onclick = () => openAddActivityDrawer(selectedDate);
+    } else {
+      emptyBox.innerHTML = `
+        <p style="font-size:15px;font-weight:750;color:var(--ink);margin-bottom:6px;">${selectedDate} 暂无活动排期</p>
+        <p style="font-size:12.5px;">请点击左侧日历中有颜色标记的日期，或展开上方「近期活动一览表」查看近期活动详情。</p>
+      `;
+      container.appendChild(emptyBox);
+    }
     return;
   }
 
@@ -2490,7 +4139,7 @@ function renderRightPanel() {
 
     const catTag = document.createElement('span');
     catTag.className = `cat-tag ${act.category}`;
-    catTag.textContent = act.category === 'drama' ? '🎭 话剧演出' : '✨ 主题活动';
+    catTag.textContent = act.category === 'drama' ? '🎭 话剧演出' : (act.category === 'rehearsal' ? '🎬 日常排练' : '✨ 主题活动');
 
     const catSelect = document.createElement('select');
     catSelect.className = 'edit-only';
@@ -2501,8 +4150,10 @@ function renderRightPanel() {
     catSelect.innerHTML = `
       <option value="drama" ${act.category === 'drama' ? 'selected' : ''}>切换为：话剧演出</option>
       <option value="theme" ${act.category === 'theme' ? 'selected' : ''}>切换为：主题活动</option>
+      <option value="rehearsal" ${act.category === 'rehearsal' ? 'selected' : ''}>切换为：日常排练</option>
     `;
     catSelect.onchange = () => {
+      if (!canEdit) return;
       act.category = catSelect.value;
       populateTitleFilterOptions();
       persistState();
@@ -2512,15 +4163,16 @@ function renderRightPanel() {
     leftMeta.append(catTag, catSelect);
 
     const rightActions = document.createElement('div');
-    rightActions.className = 'activity-box-actions';
+    rightActions.className = 'activity-box-actions edit-only';
 
     const hasFlow = Boolean(act.showFlow && Array.isArray(act.flowRows) && act.flowRows.length > 0);
 
     const addFlowBtn = document.createElement('button');
     addFlowBtn.type = 'button';
-    addFlowBtn.className = 'btn accent sm';
+    addFlowBtn.className = 'btn accent sm edit-only';
     addFlowBtn.textContent = hasFlow ? '+ 增加活动流程（新增一行）' : '+ 增加活动流程';
     addFlowBtn.onclick = () => {
+      if (!canEdit) return;
       act.showFlow = true;
       act.flowRows = act.flowRows || [];
       const rowNum = act.flowRows.length;
@@ -2579,13 +4231,15 @@ function renderRightPanel() {
     lblTitle.textContent = '活动名称：';
     const valTitle = document.createElement('div');
     valTitle.className = 'info-val title-val';
-    valTitle.contentEditable = String(isEditMode);
+    valTitle.contentEditable = String(canEdit);
     valTitle.textContent = act.title;
     valTitle.addEventListener('input', () => {
+      if (!canEdit) return;
       act.title = valTitle.textContent.trim() || '未命名活动';
       persistState();
     });
     valTitle.onblur = () => {
+      if (!canEdit) return;
       act.title = valTitle.textContent.trim() || '未命名活动';
       populateTitleFilterOptions();
       persistState();
@@ -2602,11 +4256,21 @@ function renderRightPanel() {
     lblTime.textContent = '活动时间：';
     const valTime = document.createElement('div');
     valTime.className = 'info-val time-val';
-    valTime.contentEditable = String(isEditMode);
-    valTime.title = '可直接编辑日期或时间（格式：2026/11/22  周日 14:00），修改后自动同步流程表开始时间';
+    valTime.contentEditable = String(canEdit);
+    if (canEdit) {
+      valTime.title = '可直接编辑日期或时间（格式：2026/11/22  周日 14:00），修改后自动同步流程表开始时间';
+    }
     valTime.textContent = formatActivityDateTime(act.date, getActivityTime(act));
 
+    const calBtn = document.createElement('button');
+    calBtn.type = 'button';
+    calBtn.className = 'map-link-btn cal-btn';
+    calBtn.innerHTML = '📅 添加至日历';
+    calBtn.title = '一键导出并添加至手机/电脑系统日历（iPhone、安卓、Mac、Windows等设备均支持提醒）';
+    calBtn.onclick = () => addActivityToCalendar(act, calBtn);
+
     valTime.onblur = () => {
+      if (!canEdit) return;
       const raw = valTime.textContent.trim();
       const dateMatch = raw.match(/(202\d)[/-](\d{1,2})[/-](\d{1,2})/);
       if (dateMatch) {
@@ -2628,7 +4292,7 @@ function renderRightPanel() {
       persistState();
       renderAll();
     };
-    rowTime.append(lblTime, valTime);
+    rowTime.append(lblTime, valTime, calBtn);
 
     // 3. 活动地点
     const rowLoc = document.createElement('div');
@@ -2638,8 +4302,8 @@ function renderRightPanel() {
     lblLoc.textContent = '活动地点：';
     const valLoc = document.createElement('div');
     valLoc.className = 'info-val';
-    valLoc.contentEditable = String(isEditMode);
-    valLoc.textContent = act.location || '点击填写具体活动地点';
+    valLoc.contentEditable = String(canEdit);
+    valLoc.textContent = act.location || '待定';
 
     const nativeMapLink = document.createElement('a');
     nativeMapLink.className = 'map-link-btn native-map';
@@ -2666,6 +4330,7 @@ function renderRightPanel() {
     baiduLink.title = '在百度地图中打开此活动地点';
 
     valLoc.addEventListener('input', () => {
+      if (!canEdit) return;
       act.location = valLoc.textContent.trim();
       nativeMapLink.href = getNativeMapUrl(act.location);
       amapLink.href = getAmapUrl(act.location);
@@ -2673,6 +4338,7 @@ function renderRightPanel() {
       persistState();
     });
     valLoc.onblur = () => {
+      if (!canEdit) return;
       act.location = valLoc.textContent.trim();
       nativeMapLink.href = getNativeMapUrl(act.location);
       amapLink.href = getAmapUrl(act.location);
@@ -2683,79 +4349,12 @@ function renderRightPanel() {
     };
     rowLoc.append(lblLoc, valLoc, nativeMapLink, amapLink, baiduLink);
 
-    // 4. 报名链接
+    // 4. 报名链接（预览/导出模式下直接渲染为可点击跳转的 <a> 链接，编辑模式下支持实时编辑 + 一键跳转测试）
     const rowLink = document.createElement('div');
     rowLink.className = 'info-row';
     const lblLink = document.createElement('span');
     lblLink.className = 'info-label';
     lblLink.textContent = '报名链接：';
-    const valLink = document.createElement('div');
-    valLink.className = 'info-val link-val';
-    valLink.contentEditable = String(isEditMode);
-    valLink.title = '可直接编辑，或直接粘贴整段粗门小程序分享内容（自动提取报名链接）';
-    valLink.textContent = act.link || '#小程序://粗门/IX7JsenQZCDoTot';
-
-    valLink.addEventListener('paste', e => {
-      if (!isEditMode) return;
-      const clip = e.clipboardData || window.clipboardData;
-      if (!clip) return;
-      const pastedText = clip.getData('text/plain') || '';
-      const extracted = extractCumenLink(pastedText);
-      if (extracted) {
-        e.preventDefault();
-        act.link = extracted;
-        valLink.textContent = extracted;
-        byId('global-cumen-link').value = extracted;
-        valLink.classList.add('link-updated-flash');
-        setTimeout(() => valLink.classList.remove('link-updated-flash'), 1200);
-        persistState();
-        renderOverviewTable();
-      }
-    });
-
-    valLink.addEventListener('input', () => {
-      const raw = valLink.textContent.trim();
-      const extracted = extractCumenLink(raw);
-      act.link = extracted || raw;
-      persistState();
-    });
-
-    valLink.onblur = () => {
-      const raw = valLink.textContent.trim();
-      const extracted = extractCumenLink(raw);
-      act.link = extracted || raw || '#小程序://粗门/IX7JsenQZCDoTot';
-      valLink.textContent = act.link;
-      byId('global-cumen-link').value = act.link;
-      persistState();
-      renderOverviewTable();
-    };
-
-    const pasteExtractBtn = document.createElement('button');
-    pasteExtractBtn.type = 'button';
-    pasteExtractBtn.className = 'btn sm edit-only';
-    pasteExtractBtn.textContent = '📋 粘贴分享内容提取链接';
-    pasteExtractBtn.title = '从剪贴板或粗门分享内容中智能识别报名链接并更新到此活动框';
-    pasteExtractBtn.onclick = async () => {
-      let rawText = '';
-      if (navigator.clipboard && navigator.clipboard.readText) {
-        try {
-          rawText = await navigator.clipboard.readText();
-        } catch (err) {}
-      }
-      if (!rawText) {
-        rawText = window.prompt('请粘贴粗门小程序活动分享内容（系统将自动识别其中的报名链接并更新到当前活动框）：', '') || '';
-      }
-      if (!rawText.trim()) return;
-      const extracted = extractCumenLink(rawText) || rawText.trim();
-      act.link = extracted;
-      valLink.textContent = extracted;
-      byId('global-cumen-link').value = extracted;
-      valLink.classList.add('link-updated-flash');
-      setTimeout(() => valLink.classList.remove('link-updated-flash'), 1200);
-      byId('cumen-sync-status').innerHTML = `✅ 已从粘贴的分享内容中准确识别报名链接 <code>${extracted}</code> 并更新到当前活动框！`;
-      persistState();
-      renderOverviewTable();
-    };
 
     const copyLinkBtn = document.createElement('button');
     copyLinkBtn.type = 'button';
@@ -2766,7 +4365,100 @@ function renderRightPanel() {
       copyLinkBtn.textContent = '✓ 已复制';
       setTimeout(() => { copyLinkBtn.textContent = '复制链接'; }, 1500);
     };
-    rowLink.append(lblLink, valLink, pasteExtractBtn, copyLinkBtn);
+
+    if (!canEdit) {
+      // 预览模式 & 导出的预览 HTML 页面：整个报名链接直接是可点击跳转的 <a> 标签
+      const valLinkAnchor = document.createElement('a');
+      valLinkAnchor.className = 'info-val link-val reg-link-anchor';
+      valLinkAnchor.title = '点击链接直接跳转到报名活动页面';
+      const displayLink = act.link || '#小程序://粗门/IX7JsenQZCDoTot';
+      valLinkAnchor.innerHTML = `<span>🔗 ${escapeHtml(displayLink)}</span><span style="font-size:12px;font-weight:800;white-space:nowrap;">点击报名 ↗</span>`;
+      attachRegistrationLinkNavigation(valLinkAnchor, act);
+
+      rowLink.append(lblLink, valLinkAnchor, copyLinkBtn);
+    } else {
+      // 编辑模式：可编辑文本框 + 「🚀 跳转报名页 ↗」按钮 + 「📋 粘贴分享内容提取链接」按钮 + 「复制链接」按钮
+      const valLink = document.createElement('div');
+      valLink.className = 'info-val link-val';
+      valLink.contentEditable = 'true';
+      valLink.title = '可直接编辑，或直接粘贴整段粗门小程序分享内容（自动提取报名链接）';
+      valLink.textContent = act.link || '#小程序://粗门/IX7JsenQZCDoTot';
+
+      const jumpTestBtn = document.createElement('a');
+      jumpTestBtn.className = 'map-link-btn';
+      jumpTestBtn.textContent = '🚀 跳转报名页 ↗';
+      jumpTestBtn.title = '点击直接跳转到该活动的报名页面';
+      attachRegistrationLinkNavigation(jumpTestBtn, act);
+
+      valLink.addEventListener('paste', e => {
+        const clip = e.clipboardData || window.clipboardData;
+        if (!clip) return;
+        const pastedText = clip.getData('text/plain') || '';
+        const extracted = extractCumenLink(pastedText);
+        if (extracted) {
+          e.preventDefault();
+          act.link = extracted;
+          valLink.textContent = extracted;
+          attachRegistrationLinkNavigation(jumpTestBtn, act);
+          if (byId('global-cumen-link')) byId('global-cumen-link').value = extracted;
+          valLink.classList.add('link-updated-flash');
+          setTimeout(() => valLink.classList.remove('link-updated-flash'), 1200);
+          persistState();
+          renderOverviewTable();
+        }
+      });
+
+      valLink.addEventListener('input', () => {
+        const raw = valLink.textContent.trim();
+        const extracted = extractCumenLink(raw);
+        act.link = extracted || raw;
+        attachRegistrationLinkNavigation(jumpTestBtn, act);
+        persistState();
+      });
+
+      valLink.onblur = () => {
+        const raw = valLink.textContent.trim();
+        const extracted = extractCumenLink(raw);
+        act.link = extracted || raw || '#小程序://粗门/IX7JsenQZCDoTot';
+        valLink.textContent = act.link;
+        attachRegistrationLinkNavigation(jumpTestBtn, act);
+        if (byId('global-cumen-link')) byId('global-cumen-link').value = act.link;
+        persistState();
+        renderOverviewTable();
+      };
+
+      const pasteExtractBtn = document.createElement('button');
+      pasteExtractBtn.type = 'button';
+      pasteExtractBtn.className = 'btn sm edit-only';
+      pasteExtractBtn.textContent = '📋 粘贴分享内容提取链接';
+      pasteExtractBtn.title = '从剪贴板或粗门分享内容中智能识别报名链接并更新到此活动框';
+      pasteExtractBtn.onclick = async () => {
+        let rawText = '';
+        if (navigator.clipboard && navigator.clipboard.readText) {
+          try {
+            rawText = await navigator.clipboard.readText();
+          } catch (err) {}
+        }
+        if (!rawText) {
+          rawText = window.prompt('请粘贴粗门小程序活动分享内容（系统将自动识别其中的报名链接并更新到当前活动框）：', '') || '';
+        }
+        if (!rawText.trim()) return;
+        const extracted = extractCumenLink(rawText) || rawText.trim();
+        act.link = extracted;
+        valLink.textContent = extracted;
+        attachRegistrationLinkNavigation(jumpTestBtn, act);
+        if (byId('global-cumen-link')) byId('global-cumen-link').value = extracted;
+        valLink.classList.add('link-updated-flash');
+        setTimeout(() => valLink.classList.remove('link-updated-flash'), 1200);
+        if (byId('cumen-sync-status')) {
+          byId('cumen-sync-status').innerHTML = `✅ 已从粘贴的分享内容中准确识别报名链接 <code>${escapeHtml(extracted)}</code> 并更新到当前活动框！`;
+        }
+        persistState();
+        renderOverviewTable();
+      };
+
+      rowLink.append(lblLink, valLink, jumpTestBtn, pasteExtractBtn, copyLinkBtn);
+    }
 
     infoGrid.append(rowTitle, rowTime, rowLoc, rowLink);
     box.appendChild(infoGrid);
@@ -2781,6 +4473,7 @@ function renderRightPanel() {
 
 /* 构建每个活动小框内的活动流程表 */
 function buildActivityFlowSection(act, actIdx, valTimeEl) {
+  const canEdit = isEditMode && !IS_READONLY;
   const sec = document.createElement('div');
   sec.className = 'flow-section';
 
@@ -2788,7 +4481,7 @@ function buildActivityFlowSection(act, actIdx, valTimeEl) {
   topBar.className = 'flow-header-bar';
   const titleEl = document.createElement('div');
   titleEl.className = 'flow-title';
-  titleEl.innerHTML = `<span>📋 活动流程表（开始时间 = 上一行开始时间 + 时长）</span>`;
+  titleEl.innerHTML = `<span>📋 活动流程表</span>`;
 
   const toolBtns = document.createElement('div');
   toolBtns.className = 'edit-only';
@@ -2802,6 +4495,7 @@ function buildActivityFlowSection(act, actIdx, valTimeEl) {
   autoChainBtn.textContent = '⚡ 一键公式推算全部开始时间';
   autoChainBtn.title = '自动将第2行起的开始时间设为公式 =上一行开始时间+时长';
   autoChainBtn.onclick = () => {
+    if (!canEdit) return;
     act.flowRows.forEach((r, idx) => {
       if (idx === 0) {
         if (!r.startTime) r.startTime = getActivityTime(act);
@@ -2885,6 +4579,7 @@ function buildActivityFlowSection(act, actIdx, valTimeEl) {
   replacePasteBtn.className = 'btn primary sm';
   replacePasteBtn.textContent = '替换当前流程表';
   replacePasteBtn.onclick = () => {
+    if (!canEdit) return;
     const matrix = parseClipboardMatrix('', pasteArea.value);
     if (matrix.length) {
       applyMatrixToActivityFlow(act, matrix, 0, 0, true);
@@ -2897,6 +4592,7 @@ function buildActivityFlowSection(act, actIdx, valTimeEl) {
   appendPasteBtn.className = 'btn sm';
   appendPasteBtn.textContent = '追加到末尾';
   appendPasteBtn.onclick = () => {
+    if (!canEdit) return;
     const matrix = parseClipboardMatrix('', pasteArea.value);
     if (matrix.length) {
       applyMatrixToActivityFlow(act, matrix, act.flowRows.length, 0, false);
@@ -2905,6 +4601,7 @@ function buildActivityFlowSection(act, actIdx, valTimeEl) {
   };
 
   pasteToggleBtn.onclick = () => {
+    if (!canEdit) return;
     pasteDrawer.hidden = !pasteDrawer.hidden;
     if (!pasteDrawer.hidden) pasteArea.focus();
   };
@@ -2922,9 +4619,9 @@ function buildActivityFlowSection(act, actIdx, valTimeEl) {
     <thead>
       <tr>
         <th class="col-idx">#</th>
-        <th class="col-start">开始时间 (A)</th>
-        <th class="col-dur">时长 (B)</th>
-        <th class="col-content">活动内容 (C)</th>
+        <th class="col-start">开始时间</th>
+        <th class="col-dur">时长</th>
+        <th class="col-content">活动内容</th>
         <th class="col-ops edit-only">操作</th>
       </tr>
     </thead>
@@ -2950,7 +4647,7 @@ function buildActivityFlowSection(act, actIdx, valTimeEl) {
   }
 
   applyFormulaBtn.onclick = () => {
-    if (!act.flowRows.length) return;
+    if (!canEdit || !act.flowRows.length) return;
     const rIdx = Math.max(0, Math.min(selectedCellInfo.rowIdx, act.flowRows.length - 1));
     const colKey = selectedCellInfo.colKey;
     const rawVal = formulaInput.value.trim();
@@ -2987,6 +4684,7 @@ function buildActivityFlowSection(act, actIdx, valTimeEl) {
   };
 
   insertChainFormulaBtn.onclick = () => {
+    if (!canEdit) return;
     const rIdx = Math.max(0, Math.min(selectedCellInfo.rowIdx, act.flowRows.length - 1));
     if (rIdx === 0) {
       formulaInput.value = getActivityTime(act);
@@ -3007,18 +4705,22 @@ function buildActivityFlowSection(act, actIdx, valTimeEl) {
 
     // A列：开始时间
     const tdStart = document.createElement('td');
-    tdStart.className = 'cell-start' + (row.startFormula ? ' has-formula' : '');
-    tdStart.contentEditable = String(isEditMode);
+    tdStart.className = 'cell-start' + (canEdit && row.startFormula ? ' has-formula' : '');
+    tdStart.contentEditable = String(canEdit);
     tdStart.textContent = row.startTime || '';
-    tdStart.title = row.startFormula ? `公式：${row.startFormula}（计算结果：${row.startTime}）` : '点击编辑开始时间或输入 =A1+B1 公式';
+    if (canEdit) {
+      tdStart.title = row.startFormula ? `公式：${row.startFormula}（计算结果：${row.startTime}）` : '点击编辑开始时间或输入 =A1+B1 公式';
+    }
 
     tdStart.onfocus = () => {
+      if (!canEdit) return;
       tbody.querySelectorAll('td').forEach(el => el.classList.remove('active-cell'));
       tdStart.classList.add('active-cell');
       selectedCellInfo = { rowIdx: rIdx, colKey: 'startTime' };
       syncFormulaBarWithSelection();
     };
     tdStart.onblur = () => {
+      if (!canEdit) return;
       const val = tdStart.textContent.trim();
       if (val.startsWith('=')) {
         row.startFormula = val;
@@ -3035,18 +4737,22 @@ function buildActivityFlowSection(act, actIdx, valTimeEl) {
 
     // B列：时长
     const tdDur = document.createElement('td');
-    tdDur.className = 'cell-dur' + (row.durationFormula ? ' has-formula' : '');
-    tdDur.contentEditable = String(isEditMode);
+    tdDur.className = 'cell-dur' + (canEdit && row.durationFormula ? ' has-formula' : '');
+    tdDur.contentEditable = String(canEdit);
     tdDur.textContent = row.duration || '';
-    tdDur.title = row.durationFormula ? `公式：${row.durationFormula}` : '点击修改时长（修改后下方开始时间自动根据“开始时间+时长”重算）';
+    if (canEdit) {
+      tdDur.title = row.durationFormula ? `公式：${row.durationFormula}` : '点击修改时长（修改后下方开始时间自动根据“开始时间+时长”重算）';
+    }
 
     tdDur.onfocus = () => {
+      if (!canEdit) return;
       tbody.querySelectorAll('td').forEach(el => el.classList.remove('active-cell'));
       tdDur.classList.add('active-cell');
       selectedCellInfo = { rowIdx: rIdx, colKey: 'duration' };
       syncFormulaBarWithSelection();
     };
     tdDur.onblur = () => {
+      if (!canEdit) return;
       const val = tdDur.textContent.trim();
       if (val.startsWith('=')) {
         row.durationFormula = val;
@@ -3062,19 +4768,22 @@ function buildActivityFlowSection(act, actIdx, valTimeEl) {
     // C列：活动内容
     const tdContent = document.createElement('td');
     tdContent.className = 'cell-content';
-    tdContent.contentEditable = String(isEditMode);
+    tdContent.contentEditable = String(canEdit);
     tdContent.textContent = row.content || '';
     tdContent.onfocus = () => {
+      if (!canEdit) return;
       tbody.querySelectorAll('td').forEach(el => el.classList.remove('active-cell'));
       tdContent.classList.add('active-cell');
       selectedCellInfo = { rowIdx: rIdx, colKey: 'content' };
       syncFormulaBarWithSelection();
     };
     tdContent.addEventListener('input', () => {
+      if (!canEdit) return;
       row.content = tdContent.textContent.trim();
       persistState();
     });
     tdContent.onblur = () => {
+      if (!canEdit) return;
       row.content = tdContent.textContent.trim();
       persistState();
     };
@@ -3085,7 +4794,7 @@ function buildActivityFlowSection(act, actIdx, valTimeEl) {
       [tdContent, 2]
     ].forEach(([cellEl, colIdx]) => {
       cellEl.addEventListener('paste', e => {
-        if (!isEditMode) return;
+        if (!canEdit) return;
         const clip = e.clipboardData || window.clipboardData;
         if (!clip) return;
         const html = clip.getData('text/html') || '';
@@ -3109,6 +4818,7 @@ function buildActivityFlowSection(act, actIdx, valTimeEl) {
     addRowBelow.textContent = '+';
     addRowBelow.title = '在下方插入一行（自动带入开始时间+时长公式）';
     addRowBelow.onclick = () => {
+      if (!canEdit) return;
       act.flowRows.splice(rIdx + 1, 0, {
         startTime: '',
         startFormula: `=A${rIdx + 1}+B${rIdx + 1}`,
@@ -3132,7 +4842,7 @@ function buildActivityFlowSection(act, actIdx, valTimeEl) {
     upBtn.className = 'row-btn';
     upBtn.textContent = '↑';
     upBtn.onclick = () => {
-      if (rIdx === 0) return;
+      if (!canEdit || rIdx === 0) return;
       const tmp = act.flowRows[rIdx - 1];
       act.flowRows[rIdx - 1] = act.flowRows[rIdx];
       act.flowRows[rIdx] = tmp;
@@ -3146,7 +4856,7 @@ function buildActivityFlowSection(act, actIdx, valTimeEl) {
     downBtn.className = 'row-btn';
     downBtn.textContent = '↓';
     downBtn.onclick = () => {
-      if (rIdx === act.flowRows.length - 1) return;
+      if (!canEdit || rIdx === act.flowRows.length - 1) return;
       const tmp = act.flowRows[rIdx + 1];
       act.flowRows[rIdx + 1] = act.flowRows[rIdx];
       act.flowRows[rIdx] = tmp;
@@ -3161,6 +4871,7 @@ function buildActivityFlowSection(act, actIdx, valTimeEl) {
     delBtn.textContent = '×';
     delBtn.title = '删除此行';
     delBtn.onclick = () => {
+      if (!canEdit) return;
       act.flowRows.splice(rIdx, 1);
       if (act.flowRows.length === 0) {
         act.showFlow = false;
@@ -3218,6 +4929,7 @@ function parseClipboardMatrix(htmlData, plainText) {
 }
 
 function applyMatrixToActivityFlow(act, matrix, startRowIdx, startColIdx, replaceAll) {
+  if (!isEditMode || IS_READONLY) return;
   let rowsToUse = matrix.slice();
   if (rowsToUse.length > 1 && rowsToUse[0].join(' ').includes('开始时间')) {
     rowsToUse.shift();
@@ -3286,16 +4998,19 @@ function applyMatrixToActivityFlow(act, matrix, startRowIdx, startColIdx, replac
 
 /* ==================== 添加活动、取消活动与粗门小程序抓取同步 ==================== */
 function openAddActivityDrawer(defaultDate) {
+  if (!isEditMode || IS_READONLY) return;
   const drawer = byId('add-activity-drawer');
+  if (!drawer) return;
   drawer.hidden = false;
   byId('form-act-date').value = defaultDate || selectedDate;
   byId('form-act-time').value = '14:00';
-  const currentGlobalLink = extractCumenLink(byId('global-cumen-link').value) || '#小程序://粗门/IX7JsenQZCDoTot';
+  const currentGlobalLink = extractCumenLink(byId('global-cumen-link') ? byId('global-cumen-link').value : '') || '#小程序://粗门/IX7JsenQZCDoTot';
   byId('form-act-link').value = currentGlobalLink;
   byId('form-act-title').focus();
 }
 
 function addNewActivity({ date, time, category, title, location, link, flowRows }) {
+  if (!isEditMode || IS_READONLY) return;
   const initTime = time || '14:00';
   const cleanLink = extractCumenLink(link) || (link && link.trim()) || '#小程序://粗门/IX7JsenQZCDoTot';
   const newAct = {
@@ -3323,22 +5038,24 @@ function addNewActivity({ date, time, category, title, location, link, flowRows 
 }
 
 function cancelActivityById(actId) {
+  if (!isEditMode || IS_READONLY) return;
   const idx = state.activities.findIndex(a => a.id === actId);
   if (idx === -1) return;
   const removed = state.activities.splice(idx, 1)[0];
   undoStack.push({ type: 'restore-activities', items: [removed] });
-  byId('undo-cancel-btn').hidden = false;
+  if (byId('undo-cancel-btn')) byId('undo-cancel-btn').hidden = false;
   populateTitleFilterOptions();
   persistState();
   renderAll();
 }
 
 function cancelAllActivitiesOnDate(dateStr) {
+  if (!isEditMode || IS_READONLY) return;
   const toRemove = state.activities.filter(a => a.date === dateStr);
   if (!toRemove.length) return;
   state.activities = state.activities.filter(a => a.date !== dateStr);
   undoStack.push({ type: 'restore-activities', items: toRemove });
-  byId('undo-cancel-btn').hidden = false;
+  if (byId('undo-cancel-btn')) byId('undo-cancel-btn').hidden = false;
   populateTitleFilterOptions();
   persistState();
   renderAll();
@@ -3346,7 +5063,9 @@ function cancelAllActivitiesOnDate(dateStr) {
 
 /* 粗门小程序活动信息抓取与同步 */
 async function syncFromCumenMiniProgram() {
+  if (!isEditMode || IS_READONLY) return;
   const inputEl = byId('global-cumen-link');
+  if (!inputEl) return;
   const rawInput = inputEl.value.trim();
   const statusEl = byId('cumen-sync-status');
 
@@ -3369,7 +5088,7 @@ async function syncFromCumenMiniProgram() {
     populateTitleFilterOptions();
     persistState();
     renderAll();
-    statusEl.innerHTML = `✅ 已准确识别报名链接 <code>${extractedLink}</code>，并同步更新到 <strong>${targetDate}</strong> 活动框的「报名链接」中！`;
+    if (statusEl) statusEl.innerHTML = `✅ 已准确识别报名链接 <code>${escapeHtml(extractedLink)}</code>，并同步更新到 <strong>${targetDate}</strong> 活动框的「报名链接」中！`;
   } else if (details.title || details.date || details.location) {
     addNewActivity({
       date: targetDate,
@@ -3379,18 +5098,20 @@ async function syncFromCumenMiniProgram() {
       location: details.location || '上海·壹出好戏排演剧场',
       link: extractedLink
     });
-    statusEl.innerHTML = `✅ 已从粗门小程序分享内容抓取新活动并同步报名链接 <code>${extractedLink}</code>！`;
+    if (statusEl) statusEl.innerHTML = `✅ 已从粗门小程序分享内容抓取新活动并同步报名链接 <code>${escapeHtml(extractedLink)}</code>！`;
   } else {
     state.activities.forEach(a => { a.link = extractedLink; });
     persistState();
     renderAll();
-    statusEl.innerHTML = `✅ 已同步粗门小程序报名链接 <code>${extractedLink}</code> 到活动框！`;
+    if (statusEl) statusEl.innerHTML = `✅ 已同步粗门小程序报名链接 <code>${escapeHtml(extractedLink)}</code> 到活动框！`;
   }
 }
 
 /* 更新粗门分享文本解析弹窗中的实时预览 */
 function updateCumenParsePreview() {
-  const raw = byId('cumen-raw-text').value;
+  const rawEl = byId('cumen-raw-text');
+  if (!rawEl) return;
+  const raw = rawEl.value;
   const linkCodeEl = byId('preview-extracted-link');
   const metaEl = byId('preview-extracted-meta');
   if (!raw.trim()) {
@@ -3410,11 +5131,12 @@ function updateCumenParsePreview() {
 
 /* 仅提取粘贴内容中的报名链接并更新到当前活动框 */
 function updateCurrentActivityBoxLinkFromRaw(rawText) {
+  if (!isEditMode || IS_READONLY) return;
   const details = parseCumenShareDetails(rawText);
   const extractedLink = details.link || String(rawText || '').trim();
   if (!extractedLink) return;
 
-  byId('global-cumen-link').value = extractedLink;
+  if (byId('global-cumen-link')) byId('global-cumen-link').value = extractedLink;
   const targetDate = details.date || selectedDate;
   let targetActs = state.activities.filter(a => a.date === targetDate);
   if (targetActs.length === 0) {
@@ -3428,7 +5150,9 @@ function updateCurrentActivityBoxLinkFromRaw(rawText) {
     selectDateAndJump(targetActs[0].date);
     persistState();
     renderAll();
-    byId('cumen-sync-status').innerHTML = `✅ 已成功提取报名链接 <code>${extractedLink}</code> 并更新到 <strong>${selectedDate}</strong> 活动框里的「报名链接」！`;
+    if (byId('cumen-sync-status')) {
+      byId('cumen-sync-status').innerHTML = `✅ 已成功提取报名链接 <code>${escapeHtml(extractedLink)}</code> 并更新到 <strong>${selectedDate}</strong> 活动框里的「报名链接」！`;
+    }
   } else {
     addNewActivity({
       date: targetDate,
@@ -3438,18 +5162,22 @@ function updateCurrentActivityBoxLinkFromRaw(rawText) {
       location: details.location || '上海·静安区壹出好戏排演剧场',
       link: extractedLink
     });
-    byId('cumen-sync-status').innerHTML = `✅ 已提取报名链接 <code>${extractedLink}</code> 并在 <strong>${targetDate}</strong> 生成活动框！`;
+    if (byId('cumen-sync-status')) {
+      byId('cumen-sync-status').innerHTML = `✅ 已提取报名链接 <code>${escapeHtml(extractedLink)}</code> 并在 <strong>${targetDate}</strong> 生成活动框！`;
+    }
   }
 }
 
 /* 智能识别全部分享内容：若同日期已有对应活动框则更新其报名链接与信息，否则新增活动框 */
 function parseCumenTextAndSyncOrAdd(rawText) {
+  if (!isEditMode || IS_READONLY) return;
   const text = String(rawText || '').trim();
   if (!text) return;
 
   const details = parseCumenShareDetails(text);
-  const extractedLink = details.link || (byId('global-cumen-link').value.trim() || '#小程序://粗门/IX7JsenQZCDoTot');
-  byId('global-cumen-link').value = extractedLink;
+  const fallbackLink = (byId('global-cumen-link') && byId('global-cumen-link').value.trim()) || '#小程序://粗门/IX7JsenQZCDoTot';
+  const extractedLink = details.link || fallbackLink;
+  if (byId('global-cumen-link')) byId('global-cumen-link').value = extractedLink;
 
   const targetDate = details.date || selectedDate;
   const existingActsOnDate = state.activities.filter(a => a.date === targetDate);
@@ -3474,7 +5202,9 @@ function parseCumenTextAndSyncOrAdd(rawText) {
     populateTitleFilterOptions();
     persistState();
     renderAll();
-    byId('cumen-sync-status').innerHTML = `✅ 已准确识别分享内容中的报名链接 <code>${extractedLink}</code>，并更新到 <strong>${targetDate}</strong> 的活动框中！`;
+    if (byId('cumen-sync-status')) {
+      byId('cumen-sync-status').innerHTML = `✅ 已准确识别分享内容中的报名链接 <code>${escapeHtml(extractedLink)}</code>，并更新到 <strong>${targetDate}</strong> 的活动框中！`;
+    }
     return;
   }
 
@@ -3494,10 +5224,86 @@ function parseCumenTextAndSyncOrAdd(rawText) {
       { startTime: '', startFormula: '=A3+B3', duration: '15分钟', durationFormula: '', content: '自由交流 & 活动合影' }
     ]
   });
-  byId('cumen-sync-status').innerHTML = `✅ 已准确识别报名链接 <code>${extractedLink}</code> 并在 <strong>${targetDate}</strong> 生成活动框！`;
+  if (byId('cumen-sync-status')) {
+    byId('cumen-sync-status').innerHTML = `✅ 已准确识别报名链接 <code>${escapeHtml(extractedLink)}</code> 并在 <strong>${targetDate}</strong> 生成活动框！`;
+  }
+}
+
+/* 生成仅可预览、不可编辑且报名链接可直接点击跳转的只读 HTML 字符串 */
+function buildReadonlyExportHtml() {
+  persistState(true);
+
+  // 先临时切换为预览态渲染 DOM，使导出的静态 HTML 中所有报名链接直接为可点击的 <a> 超链接
+  const prevEditMode = isEditMode;
+  isEditMode = false;
+  renderAll();
+
+  const docClone = document.documentElement.cloneNode(true);
+  docClone.setAttribute('data-readonly', 'true');
+
+  // 恢复当前页面的编辑模式状态
+  isEditMode = prevEditMode;
+  renderAll();
+
+  const bodyClone = docClone.querySelector('body');
+  if (bodyClone) {
+    bodyClone.classList.remove('edit-mode');
+    bodyClone.classList.add('readonly-export');
+  }
+
+    /* 关闭导出文件中所有元素的可编辑属性 */
+  docClone.querySelectorAll('[contenteditable]').forEach(el => {
+    el.setAttribute('contenteditable', 'false');
+  });
+
+  /* 收起所有编辑弹窗抽屉 */
+  docClone.querySelectorAll('.drawer-box').forEach(el => {
+    el.setAttribute('hidden', '');
+  });
+
+  /* 调整导出文件中的右侧提示文案为预览引导 */
+  const hintClone = docClone.querySelector('#right-panel-hint');
+  if (hintClone) {
+    hintClone.textContent = '点击左侧日历日期可查看当日活动详情；直接点击「报名链接」即可跳转到报名活动页面，支持一键唤起地图导航。';
+  }
+
+  return '<!doctype html>\n' + docClone.outerHTML;
+}
+
+/* 导出为完整可编辑状态的 HTML 文件（内置最新活动数据与完整编辑条） */
+function buildEditableExportHtml() {
+  const docClone = document.documentElement.cloneNode(true);
+  docClone.removeAttribute('data-readonly');
+
+  // 将最新的活动数据和设置更新到 initial-data 中，确保打开即是最新内容
+  const initialDataScript = docClone.querySelector('#initial-data');
+  if (initialDataScript) {
+    initialDataScript.textContent = JSON.stringify({
+      activities: activities,
+      selectedDate: selectedDate,
+      activePeriod: activePeriod,
+      activeMonth: activeMonth,
+      uiTexts: uiTexts,
+      version: 'v8-editable'
+    }, null, 2);
+  }
+
+  const bodyClone = docClone.querySelector('body');
+  if (bodyClone) {
+    bodyClone.classList.add('edit-mode');
+    bodyClone.classList.remove('readonly-export');
+  }
+
+  // 保证所有原本可编辑的字段处于 contenteditable="true"
+  docClone.querySelectorAll('[contenteditable]').forEach(el => {
+    el.setAttribute('contenteditable', 'true');
+  });
+
+  return '<!doctype html>\n' + docClone.outerHTML;
 }
 
 function renderAll() {
+  enforceModeState();
   renderMonthFilterButtons();
   renderOverviewTable();
   renderCalendar();
@@ -3506,6 +5312,7 @@ function renderAll() {
 
 /* ==================== 实时保存与手动保存按钮绑定 ==================== */
 function triggerManualSave() {
+  if (IS_READONLY) return;
   persistState(true);
   const saveBtns = [byId('manual-save-btn'), byId('right-save-btn')];
   saveBtns.forEach(btn => {
@@ -3516,10 +5323,11 @@ function triggerManualSave() {
   });
 }
 
-byId('manual-save-btn').onclick = triggerManualSave;
-byId('right-save-btn').onclick = triggerManualSave;
+if (byId('manual-save-btn')) byId('manual-save-btn').onclick = triggerManualSave;
+if (byId('right-save-btn')) byId('right-save-btn').onclick = triggerManualSave;
 
 document.addEventListener('keydown', e => {
+  if (IS_READONLY) return;
   if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 's') {
     e.preventDefault();
     triggerManualSave();
@@ -3529,8 +5337,14 @@ document.addEventListener('keydown', e => {
 uiTextIds.forEach(id => {
   const el = byId(id);
   if (el) {
-    el.addEventListener('input', () => persistState(false));
-    el.addEventListener('blur', () => persistState(false));
+    el.addEventListener('input', () => {
+      if (!isEditMode || IS_READONLY) return;
+      persistState(false);
+    });
+    el.addEventListener('blur', () => {
+      if (!isEditMode || IS_READONLY) return;
+      persistState(false);
+    });
   }
 });
 
@@ -3580,186 +5394,290 @@ byId('date-picker').onchange = e => {
   }
 };
 
-byId('day-status-select').onchange = e => {
-  const val = e.target.value;
-  state.customDayStatus = state.customDayStatus || {};
-  if (val === 'auto') {
-    delete state.customDayStatus[selectedDate];
-  } else {
-    state.customDayStatus[selectedDate] = val;
-  }
-  persistState();
-  renderAll();
-};
-
-byId('top-add-activity-btn').onclick = () => openAddActivityDrawer(selectedDate);
-byId('filter-bar-add-btn').onclick = () => openAddActivityDrawer(selectedDate);
-byId('cal-add-activity-btn').onclick = () => openAddActivityDrawer(selectedDate);
-byId('right-add-activity-btn').onclick = () => openAddActivityDrawer(selectedDate);
-byId('close-add-drawer-btn').onclick = () => { byId('add-activity-drawer').hidden = true; };
-
-byId('form-act-link').addEventListener('paste', e => {
-  const clip = e.clipboardData || window.clipboardData;
-  if (!clip) return;
-  const pasted = clip.getData('text/plain') || '';
-  const extracted = extractCumenLink(pasted);
-  if (extracted) {
-    e.preventDefault();
-    byId('form-act-link').value = extracted;
-  }
-});
-
-byId('submit-add-activity-btn').onclick = () => {
-  const date = byId('form-act-date').value || selectedDate;
-  const time = byId('form-act-time').value || '14:00';
-  const category = byId('form-act-category').value;
-  const title = byId('form-act-title').value.trim() || (category === 'drama' ? '话剧演读会《无人生还》' : '恋爱综艺《壹出心动戏码》');
-  const location = byId('form-act-location').value.trim() || '上海·静安区壹出好戏排演剧场';
-  const rawLink = byId('form-act-link').value.trim();
-  const link = extractCumenLink(rawLink) || rawLink || '#小程序://粗门/IX7JsenQZCDoTot';
-
-  addNewActivity({ date, time, category, title, location, link });
-  byId('form-act-title').value = '';
-  byId('form-act-location').value = '';
-  byId('add-activity-drawer').hidden = true;
-};
-
-byId('cal-cancel-all-btn').onclick = () => cancelAllActivitiesOnDate(selectedDate);
-
-byId('undo-cancel-btn').onclick = () => {
-  if (!undoStack.length) return;
-  const action = undoStack.pop();
-  if (action.type === 'restore-flow') {
-    const targetAct = state.activities.find(a => a.id === action.actId);
-    if (targetAct) {
-      targetAct.flowRows = action.prevRows;
-      targetAct.showFlow = action.prevShowFlow;
+if (byId('day-status-select')) {
+  byId('day-status-select').onchange = e => {
+    if (!isEditMode || IS_READONLY) return;
+    const val = e.target.value;
+    state.customDayStatus = state.customDayStatus || {};
+    if (val === 'auto') {
+      delete state.customDayStatus[selectedDate];
+    } else {
+      state.customDayStatus[selectedDate] = val;
     }
-  } else if (action.type === 'restore-activities' && Array.isArray(action.items)) {
-    state.activities.push(...action.items);
-  }
-  if (!undoStack.length) byId('undo-cancel-btn').hidden = true;
-  populateTitleFilterOptions();
-  persistState();
-  renderAll();
-};
+    persistState();
+    renderAll();
+  };
+}
 
-byId('global-cumen-link').addEventListener('paste', e => {
-  const clip = e.clipboardData || window.clipboardData;
-  if (!clip) return;
-  const pasted = clip.getData('text/plain') || '';
-  if (pasted.includes('\n') || pasted.length > 35) {
-    e.preventDefault();
-    byId('global-cumen-link').value = pasted;
-    syncFromCumenMiniProgram();
-  }
-});
+if (byId('top-add-activity-btn')) byId('top-add-activity-btn').onclick = () => openAddActivityDrawer(selectedDate);
+if (byId('filter-bar-add-btn')) byId('filter-bar-add-btn').onclick = () => openAddActivityDrawer(selectedDate);
+if (byId('cal-add-activity-btn')) byId('cal-add-activity-btn').onclick = () => openAddActivityDrawer(selectedDate);
+if (byId('right-add-activity-btn')) byId('right-add-activity-btn').onclick = () => openAddActivityDrawer(selectedDate);
+if (byId('close-add-drawer-btn')) byId('close-add-drawer-btn').onclick = () => { byId('add-activity-drawer').hidden = true; };
 
-byId('sync-cumen-btn').onclick = syncFromCumenMiniProgram;
-
-byId('top-cumen-parse-btn').onclick = () => {
-  const drawer = byId('cumen-parse-drawer');
-  drawer.hidden = !drawer.hidden;
-  if (!drawer.hidden) byId('cumen-raw-text').focus();
-};
-byId('open-parse-modal-btn').onclick = () => {
-  byId('cumen-parse-drawer').hidden = false;
-  byId('cumen-raw-text').focus();
-};
-byId('close-parse-drawer-btn').onclick = () => {
-  byId('cumen-parse-drawer').hidden = true;
-};
-
-byId('cumen-raw-text').addEventListener('input', updateCumenParsePreview);
-byId('cumen-raw-text').addEventListener('paste', () => {
-  setTimeout(updateCumenParsePreview, 20);
-});
-
-byId('fill-sample-cumen-btn').onclick = () => {
-  byId('cumen-raw-text').value = `话剧演读会《无人生还》\n时间：${selectedDate} 14:00\n地点：上海·静安区壹出好戏排演剧场\n报名链接：#小程序://粗门/IX7JsenQZCDoTot`;
-  updateCumenParsePreview();
-};
-
-byId('update-current-link-btn').onclick = () => {
-  const raw = byId('cumen-raw-text').value;
-  if (raw.trim()) {
-    updateCurrentActivityBoxLinkFromRaw(raw);
-    byId('cumen-raw-text').value = '';
-    updateCumenParsePreview();
-    byId('cumen-parse-drawer').hidden = true;
-  }
-};
-
-byId('run-cumen-parse-btn').onclick = () => {
-  const raw = byId('cumen-raw-text').value;
-  if (raw.trim()) {
-    parseCumenTextAndSyncOrAdd(raw);
-    byId('cumen-raw-text').value = '';
-    updateCumenParsePreview();
-    byId('cumen-parse-drawer').hidden = true;
-  }
-};
-
-byId('toggle-edit-btn').onclick = () => {
-  isEditMode = !isEditMode;
-  document.body.classList.toggle('edit-mode', isEditMode);
-  byId('mode-indicator').textContent = isEditMode
-    ? '编辑模式已开启 · 任意修改均自动实时保存'
-    : '预览只读模式';
-  byId('toggle-edit-btn').textContent = isEditMode ? '切换为预览模式' : '切换为编辑模式';
-  uiTextIds.forEach(id => {
-    const el = byId(id);
-    if (el) el.contentEditable = String(isEditMode);
+if (byId('form-act-link')) {
+  byId('form-act-link').addEventListener('paste', e => {
+    if (!isEditMode || IS_READONLY) return;
+    const clip = e.clipboardData || window.clipboardData;
+    if (!clip) return;
+    const pasted = clip.getData('text/plain') || '';
+    const extracted = extractCumenLink(pasted);
+    if (extracted) {
+      e.preventDefault();
+      byId('form-act-link').value = extracted;
+    }
   });
-  renderAll();
-};
+}
 
-byId('print-btn').onclick = () => window.print();
+if (byId('submit-add-activity-btn')) {
+  byId('submit-add-activity-btn').onclick = () => {
+    if (!isEditMode || IS_READONLY) return;
+    const date = byId('form-act-date').value || selectedDate;
+    const time = byId('form-act-time').value || '14:00';
+    const category = byId('form-act-category').value;
+    const title = byId('form-act-title').value.trim() || (category === 'drama' ? '话剧演读会《无人生还》' : '恋爱综艺《壹出心动戏码》');
+    const location = byId('form-act-location').value.trim() || '上海·静安区壹出好戏排演剧场';
+    const rawLink = byId('form-act-link').value.trim();
+    const link = extractCumenLink(rawLink) || rawLink || '#小程序://粗门/IX7JsenQZCDoTot';
 
-byId('download-html-btn').onclick = async () => {
-  persistState(true);
-  const html = '<!doctype html>\n' + document.documentElement.outerHTML;
-  if (window.showSaveFilePicker) {
-    try {
-      const handle = await window.showSaveFilePicker({
-        suggestedName: `壹出好戏剧团_近期活动一览表_${selectedDate}.html`,
-        types: [{ description: 'HTML Document', accept: { 'text/html': ['.html'] } }]
-      });
-      const writable = await handle.createWritable();
-      await writable.write(html);
-      await writable.close();
-      updateSaveIndicator(true);
-      return;
-    } catch (err) {
-      if (err.name === 'AbortError') return;
+    addNewActivity({ date, time, category, title, location, link });
+    byId('form-act-title').value = '';
+    byId('form-act-location').value = '';
+    byId('add-activity-drawer').hidden = true;
+  };
+}
+
+if (byId('cal-cancel-all-btn')) {
+  byId('cal-cancel-all-btn').onclick = () => cancelAllActivitiesOnDate(selectedDate);
+}
+
+if (byId('undo-cancel-btn')) {
+  byId('undo-cancel-btn').onclick = () => {
+    if (!isEditMode || IS_READONLY || !undoStack.length) return;
+    const action = undoStack.pop();
+    if (action.type === 'restore-flow') {
+      const targetAct = state.activities.find(a => a.id === action.actId);
+      if (targetAct) {
+        targetAct.flowRows = action.prevRows;
+        targetAct.showFlow = action.prevShowFlow;
+      }
+    } else if (action.type === 'restore-activities' && Array.isArray(action.items)) {
+      state.activities.push(...action.items);
     }
-  }
-  const blob = new Blob([html], { type: 'text/html;charset=utf-8' });
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement('a');
-  a.href = url;
-  a.download = `壹出好戏剧团_近期活动一览表_${selectedDate}.html`;
-  document.body.appendChild(a);
-  a.click();
-  a.remove();
-  URL.revokeObjectURL(url);
-};
+    if (!undoStack.length) byId('undo-cancel-btn').hidden = true;
+    populateTitleFilterOptions();
+    persistState();
+    renderAll();
+  };
+}
 
-byId('reset-data-btn').onclick = () => {
-  localStorage.removeItem(STORAGE_KEY);
-  localStorage.removeItem('yichuhaoxi-simplified-activities-v8');
-  localStorage.removeItem('yichuhaoxi-simplified-activities-v7');
-  localStorage.removeItem('yichuhaoxi-simplified-activities-v6');
-  localStorage.removeItem('yichuhaoxi-simplified-activities-v5');
-  localStorage.removeItem('yichuhaoxi-simplified-activities-v4');
-  localStorage.removeItem('yichuhaoxi-simplified-activities-v3');
-  location.reload();
-};
+if (byId('global-cumen-link')) {
+  byId('global-cumen-link').addEventListener('paste', e => {
+    if (!isEditMode || IS_READONLY) return;
+    const clip = e.clipboardData || window.clipboardData;
+    if (!clip) return;
+    const pasted = clip.getData('text/plain') || '';
+    if (pasted.includes('\n') || pasted.length > 35) {
+      e.preventDefault();
+      byId('global-cumen-link').value = pasted;
+      syncFromCumenMiniProgram();
+    }
+  });
+}
+
+if (byId('sync-cumen-btn')) byId('sync-cumen-btn').onclick = syncFromCumenMiniProgram;
+
+if (byId('top-cumen-parse-btn')) {
+  byId('top-cumen-parse-btn').onclick = () => {
+    if (!isEditMode || IS_READONLY) return;
+    const drawer = byId('cumen-parse-drawer');
+    drawer.hidden = !drawer.hidden;
+    if (!drawer.hidden) byId('cumen-raw-text').focus();
+  };
+}
+if (byId('open-parse-modal-btn')) {
+  byId('open-parse-modal-btn').onclick = () => {
+    if (!isEditMode || IS_READONLY) return;
+    byId('cumen-parse-drawer').hidden = false;
+    byId('cumen-raw-text').focus();
+  };
+}
+if (byId('close-parse-drawer-btn')) {
+  byId('close-parse-drawer-btn').onclick = () => {
+    byId('cumen-parse-drawer').hidden = true;
+  };
+}
+
+if (byId('cumen-raw-text')) {
+  byId('cumen-raw-text').addEventListener('input', updateCumenParsePreview);
+  byId('cumen-raw-text').addEventListener('paste', () => {
+    setTimeout(updateCumenParsePreview, 20);
+  });
+}
+
+if (byId('fill-sample-cumen-btn')) {
+  byId('fill-sample-cumen-btn').onclick = () => {
+    if (!isEditMode || IS_READONLY) return;
+    byId('cumen-raw-text').value = `话剧演读会《无人生还》\n时间：${selectedDate} 14:00\n地点：上海·静安区壹出好戏排演剧场\n报名链接：#小程序://粗门/IX7JsenQZCDoTot`;
+    updateCumenParsePreview();
+  };
+}
+
+if (byId('update-current-link-btn')) {
+  byId('update-current-link-btn').onclick = () => {
+    if (!isEditMode || IS_READONLY) return;
+    const raw = byId('cumen-raw-text').value;
+    if (raw.trim()) {
+      updateCurrentActivityBoxLinkFromRaw(raw);
+      byId('cumen-raw-text').value = '';
+      updateCumenParsePreview();
+      byId('cumen-parse-drawer').hidden = true;
+    }
+  };
+}
+
+if (byId('run-cumen-parse-btn')) {
+  byId('run-cumen-parse-btn').onclick = () => {
+    if (!isEditMode || IS_READONLY) return;
+    const raw = byId('cumen-raw-text').value;
+    if (raw.trim()) {
+      parseCumenTextAndSyncOrAdd(raw);
+      byId('cumen-raw-text').value = '';
+      updateCumenParsePreview();
+      byId('cumen-parse-drawer').hidden = true;
+    }
+  };
+}
+
+if (byId('toggle-edit-btn')) {
+  byId('toggle-edit-btn').onclick = () => {
+    if (IS_READONLY) return;
+    isEditMode = !isEditMode;
+    byId('mode-indicator').textContent = isEditMode
+      ? '编辑模式已开启 · 任意修改均自动实时保存'
+      : '预览只读模式 · 点击报名链接可直接跳转';
+    byId('toggle-edit-btn').textContent = isEditMode ? '切换为预览模式' : '切换为编辑模式';
+    renderAll();
+  };
+}
+
+if (byId('print-btn')) byId('print-btn').onclick = () => window.print();
+
+/* 导出为完整可编辑的 HTML 文件（内置最新修改数据，支持后续随时继续编辑） */
+if (byId('download-editable-html-btn')) {
+  byId('download-editable-html-btn').onclick = async () => {
+    if (IS_READONLY) return;
+    persistState(true);
+    const html = buildEditableExportHtml();
+    const suggestedFileName = `壹出好戏剧团_近期活动一览表_最新可编辑版_${selectedDate}.html`;
+    if (window.showSaveFilePicker) {
+      try {
+        const handle = await window.showSaveFilePicker({
+          suggestedName: suggestedFileName,
+          types: [{ description: 'HTML Document (Editable)', accept: { 'text/html': ['.html'] } }]
+        });
+        const writable = await handle.createWritable();
+        await writable.write(html);
+        await writable.close();
+        updateSaveIndicator(true);
+        return;
+      } catch (err) {
+        if (err.name === 'AbortError') return;
+      }
+    }
+    const blob = new Blob([html], { type: 'text/html;charset=utf-8' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = suggestedFileName;
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    URL.revokeObjectURL(url);
+    updateSaveIndicator(true);
+  };
+}
+
+/* 导出为仅可预览、不可编辑的 HTML 文件 */
+if (byId('download-html-btn')) {
+  byId('download-html-btn').onclick = async () => {
+    if (IS_READONLY) return;
+    const html = buildReadonlyExportHtml();
+    const suggestedFileName = `壹出好戏剧团_近期活动一览表_预览版_${selectedDate}.html`;
+    if (window.showSaveFilePicker) {
+      try {
+        const handle = await window.showSaveFilePicker({
+          suggestedName: suggestedFileName,
+          types: [{ description: 'HTML Document (Preview Only)', accept: { 'text/html': ['.html'] } }]
+        });
+        const writable = await handle.createWritable();
+        await writable.write(html);
+        await writable.close();
+        updateSaveIndicator(true);
+        return;
+      } catch (err) {
+        if (err.name === 'AbortError') return;
+      }
+    }
+    const blob = new Blob([html], { type: 'text/html;charset=utf-8' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = suggestedFileName;
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    URL.revokeObjectURL(url);
+  };
+}
+
+if (byId('reset-data-btn')) {
+  byId('reset-data-btn').onclick = () => {
+    if (IS_READONLY) return;
+    localStorage.removeItem(STORAGE_KEY);
+    localStorage.removeItem('yichuhaoxi-simplified-activities-v8');
+    localStorage.removeItem('yichuhaoxi-simplified-activities-v7');
+    localStorage.removeItem('yichuhaoxi-simplified-activities-v6');
+    localStorage.removeItem('yichuhaoxi-simplified-activities-v5');
+    localStorage.removeItem('yichuhaoxi-simplified-activities-v4');
+    localStorage.removeItem('yichuhaoxi-simplified-activities-v3');
+    location.reload();
+  };
+}
 
 // 初始化渲染
 applyUiText();
 populateTitleFilterOptions();
 renderAll();
 updateSaveIndicator(false);
+
+// 会员弹窗事件绑定
+const vipOverlay = byId('vip-modal-overlay');
+const openVipBtn = byId('open-vip-btn');
+const closeVipBtn = byId('close-vip-modal-btn');
+if (openVipBtn && vipOverlay) {
+  openVipBtn.addEventListener('click', () => {
+    vipOverlay.classList.add('active');
+  });
+}
+if (closeVipBtn && vipOverlay) {
+  closeVipBtn.addEventListener('click', () => {
+    vipOverlay.classList.remove('active');
+  });
+}
+if (vipOverlay) {
+  vipOverlay.addEventListener('click', (e) => {
+    if (e.target === vipOverlay) {
+      vipOverlay.classList.remove('active');
+    }
+  });
+}
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape' && vipOverlay && vipOverlay.classList.contains('active')) {
+    vipOverlay.classList.remove('active');
+  }
+});
 </script>
+
+
 </body></html>
